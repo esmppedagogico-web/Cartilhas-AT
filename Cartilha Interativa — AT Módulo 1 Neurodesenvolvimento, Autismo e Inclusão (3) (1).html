@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cartilha Interativa — AT Módulo 1: Neurodesenvolvimento, Autismo e Inclusão</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Inter:wght@400;600&display=swap">
+<style>
+/* Skip artifact shell — fixed styles served beside every artifact.
+   Tokens, utilities and components (basecoat 1.0 markup, no CDN); artifacts
+   override --accent for their own identity. */
+:root {
+  color-scheme: light dark;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --accent-text: color-mix(in srgb, var(--accent) 72%, #000);
+  --bg: #f8f9fb;
+  --surface: #ffffff;
+  --text: #14171f;
+  --text-muted: #5b6472;
+  --border: rgba(20, 23, 31, 0.10);
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(20, 23, 31, 0.08);
+  --space: 16px;
+  --success: #0a7a35;
+  --danger: #c0262d;
+  --warning: #8a5300;
+}
+/* Theme resolution. Without data-theme the viewer's system preference decides,
+   as it always did. With it, the artifact's own choice wins in BOTH directions:
+   a page that hardcodes one palette must not be handed the opposite set of
+   tokens by the machine it happens to be opened on. The dark values appear
+   twice because a media query cannot be folded into a selector list.
+   The attribute sits inside :where() so these blocks keep the specificity of a
+   bare :root — the page's own <style> is linked after this file and must go on
+   overriding any token it wants, exactly as it could before. */
+@media (prefers-color-scheme: dark) {
+  :root:where(:not([data-theme="light"])) {
+    --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+    --bg: #101318;
+    --surface: #181c23;
+    --text: #eef1f6;
+    --text-muted: #9aa4b2;
+    --border: rgba(238, 241, 246, 0.12);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    --success: #4ade80;
+    --danger: #f87171;
+    --warning: #fbbf24;
+  }
+}
+:root:where([data-theme="dark"]) {
+  color-scheme: dark;
+  --accent-text: color-mix(in srgb, var(--accent) 78%, #fff);
+  --bg: #101318;
+  --surface: #181c23;
+  --text: #eef1f6;
+  --text-muted: #9aa4b2;
+  --border: rgba(238, 241, 246, 0.12);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --success: #4ade80;
+  --danger: #f87171;
+  --warning: #fbbf24;
+}
+:root:where([data-theme="light"]) { color-scheme: light; }
+/* Pages generated before the shell had its own components still link the
+   basecoat CDN, which reads its own tokens and switches theme only on a
+   .dark class. Bridged to the shell's, whatever of it those pages use takes
+   the page's accent and follows the declared theme. Its --accent token is a
+   hover tint, renamed in its theme as --color-accent; the shell's --accent is
+   the brand colour, so the tint is derived from it here. */
+:root {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--surface);
+  --card-foreground: var(--text);
+  --popover: var(--surface);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--accent-contrast);
+  --secondary: color-mix(in srgb, var(--text) 7%, var(--surface));
+  --secondary-foreground: var(--text);
+  --muted: color-mix(in srgb, var(--text) 5%, var(--surface));
+  --muted-foreground: var(--text-muted);
+  --color-accent: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --color-accent-foreground: var(--text);
+  --destructive: var(--danger);
+  --input: var(--border);
+  --ring: var(--accent);
+}
+* { box-sizing: border-box; }
+/* The reset the pages were written against: they all linked basecoat, which
+   ships Tailwind's. Its components now live here, so the reset does too. */
+*, ::before, ::after, ::backdrop { margin: 0; padding: 0; border: 0 solid; }
+/* Preflight's rule too: without it a component class that sets display
+   (.alert, .card, .btn…) beats the hidden attribute and shows the element. */
+[hidden]:where(:not([hidden="until-found"])) { display: none !important; }
+.hidden { display: none !important; }
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; }
+a { color: inherit; text-decoration: inherit; }
+b, strong { font-weight: bolder; }
+ol, ul, menu { list-style: none; }
+svg, video, canvas, iframe { display: block; vertical-align: middle; }
+button, input, select, textarea { color: inherit; background-color: transparent; border-radius: 0; }
+table { border-collapse: collapse; }
+hr { height: 0; color: inherit; border-top-width: 1px; }
+html, body { margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+
+.shell-container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+.shell-section { padding: calc(var(--space) * 2) 0; }
+.shell-grid { display: grid; gap: var(--space); grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.shell-toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: var(--space); }
+.shell-footer { padding: 24px 0 40px; color: var(--text-muted); font-size: 13px; }
+
+.shell-hero { padding: calc(var(--space) * 3) 0 calc(var(--space) * 2); }
+.shell-hero h1 { font-size: clamp(26px, 4vw, 40px); line-height: 1.15; margin: 0 0 10px; text-wrap: balance; }
+.shell-hero p { color: var(--text-muted); max-width: 60ch; margin: 0; }
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: var(--space);
+}
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .kpi-value { font-size: clamp(22px, 2.3vw, 28px); font-weight: 650; line-height: 1.1; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.kpi .kpi-label { font-size: 13px; color: var(--text-muted); }
+.kpi .kpi-delta { font-size: 12.5px; font-weight: 600; }
+.kpi .kpi-delta.up { color: var(--success); }
+.kpi .kpi-delta.down { color: var(--danger); }
+
+table.shell-table { border-collapse: collapse; width: 100%; font-size: 14px; }
+table.shell-table th {
+  text-align: left; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase;
+  color: var(--text-muted); font-weight: 600;
+}
+table.shell-table th, table.shell-table td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--border); }
+table.shell-table td.num, table.shell-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+table.shell-table tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+
+.chart-box { width: 100%; min-height: 220px; }
+.chart-box svg { width: 100%; height: auto; display: block; }
+.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin-top: 12px; font-size: 12.5px; color: var(--text-muted); }
+.chart-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-legend i { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.chart-legend b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.muted { color: var(--text-muted); }
+.accent { color: var(--accent-text); }
+.shell-badge, .eyebrow {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 12%, transparent); color: var(--accent-text);
+}
+/* A pill keeps its content width inside flex and grid columns, which would
+   otherwise stretch it across the card; a centred parent still centres it. */
+.shell-badge, .eyebrow, .badge { width: fit-content; max-width: 100%; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .shell-fade { animation: shell-fade 400ms ease both; }
+  @keyframes shell-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+}
+
+/* Layout and type utilities: what the pages kept spelling in style="".
+   Spacing and type sizes follow Tailwind's scale; there is no Tailwind. */
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.stack { display: flex; flex-direction: column; gap: var(--space); }
+.between { justify-content: space-between; }
+.grow { flex: 1 1 0; min-width: 0; }
+.cols-2, .cols-3, .cols-4, .cols-5 { display: grid; gap: var(--space); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 720px) {
+  .cols-2, .cols-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cols-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 1000px) { .cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+.gap-1 { gap: 4px; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+.m-0 { margin: 0; }
+.mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mt-4 { margin-top: 16px; } .mt-6 { margin-top: 24px; }
+.mb-1 { margin-bottom: 4px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; } .mb-4 { margin-bottom: 16px; } .mb-6 { margin-bottom: 24px; }
+.p-2 { padding: 8px; } .p-3 { padding: 12px; } .p-4 { padding: 16px; } .p-6 { padding: 24px; }
+.text-xs { font-size: 12px; } .text-sm { font-size: 14px; } .text-base { font-size: 16px; }
+.text-lg { font-size: 18px; } .text-xl { font-size: 20px; line-height: 1.35; }
+.text-2xl { font-size: 24px; line-height: 1.25; } .text-3xl { font-size: 30px; line-height: 1.2; }
+.font-medium { font-weight: 500; } .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+.text-right { text-align: right; } .text-center { text-align: center; }
+.nowrap { white-space: nowrap; }
+.truncate { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums; }
+.w-full { width: 100%; }
+.text-success { color: var(--success); } .text-danger { color: var(--danger); } .text-warning { color: var(--warning); }
+
+/* Components, with basecoat 1.0 markup (variants and sizes are data
+   attributes) and the shell tokens, so a page needs neither component CSS
+   nor a CSS framework. An older page that also links basecoat gets these
+   rules after it, over the same properties. */
+button, input, select, textarea { font: inherit; }
+input[type="checkbox"], input[type="radio"] { accent-color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  height: 36px; padding: 0 14px; border: 1px solid transparent; border-radius: calc(var(--radius) - 2px);
+  background: var(--accent); color: var(--accent-contrast);
+  font-size: 14px; font-weight: 500; line-height: 1; white-space: nowrap; text-decoration: none; cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+.btn:hover { background: color-mix(in srgb, var(--accent) 86%, #000); }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.5; pointer-events: none; }
+.btn[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.btn[data-variant="secondary"]:hover { background: color-mix(in srgb, var(--text) 14%, var(--surface)); }
+.btn[data-variant="outline"] { background: var(--surface); color: var(--text); border-color: var(--border); }
+.btn[data-variant="ghost"] { background: transparent; color: var(--text); }
+.btn[data-variant="outline"]:hover, .btn[data-variant="ghost"]:hover { background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.btn[data-variant="destructive"] { background: var(--danger); color: var(--bg); }
+.btn[data-variant="destructive"]:hover { background: color-mix(in srgb, var(--danger) 86%, var(--text)); }
+.btn[data-variant="link"] { height: auto; padding: 0; background: none; color: var(--accent-text); text-decoration: underline; text-underline-offset: 3px; }
+.btn[data-size="sm"] { height: 30px; padding: 0 10px; font-size: 13px; }
+.btn[data-size="lg"] { height: 42px; padding: 0 20px; font-size: 15px; }
+.btn[data-size="icon"] { width: 36px; padding: 0; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px;
+  border: 1px solid transparent; border-radius: 999px; background: var(--accent); color: var(--accent-contrast);
+  font-size: 12px; font-weight: 600; line-height: 1.5; white-space: nowrap;
+}
+.badge[data-variant="secondary"] { background: color-mix(in srgb, var(--text) 8%, var(--surface)); color: var(--text); }
+.badge[data-variant="outline"] { background: transparent; color: var(--text); border-color: var(--border); }
+.badge[data-variant="destructive"] { background: color-mix(in srgb, var(--danger) 14%, var(--surface)); color: var(--danger); }
+
+.alert {
+  display: grid; gap: 4px; padding: 12px 16px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+.alert h2, .alert h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.alert p, .alert section { margin: 0; color: var(--text-muted); }
+.alert[data-variant="destructive"] { border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: color-mix(in srgb, var(--danger) 7%, var(--surface)); color: var(--danger); }
+
+.card {
+  display: flex; flex-direction: column; gap: 16px; padding: 20px 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 2px);
+  background: var(--surface); color: var(--text); box-shadow: var(--shadow);
+}
+.card > header, .card > section, .card > footer { padding: 0 20px; }
+.card > header { display: grid; gap: 4px; }
+.card > header h2, .card > header h3 { margin: 0; font-size: 16px; font-weight: 600; line-height: 1.3; }
+.card > header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+.card > footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+
+.input {
+  width: 100%; min-height: 36px; padding: 6px 12px; border: 1px solid var(--border); border-radius: calc(var(--radius) - 2px);
+  background: var(--surface); color: var(--text); font-size: 14px;
+}
+textarea.input { min-height: 84px; resize: vertical; }
+.input::placeholder { color: var(--text-muted); }
+.input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent); }
+.field { display: grid; gap: 6px; }
+.field label { font-size: 14px; font-weight: 500; }
+.field [role="alert"] { color: var(--danger); font-size: 13px; }
+
+dialog.dialog {
+  width: min(520px, calc(100vw - 32px)); max-height: calc(100vh - 32px); margin: auto; padding: 0;
+  border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px);
+  background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+dialog.dialog::backdrop { background: rgba(0, 0, 0, 0.5); }
+dialog.dialog > div { display: grid; gap: 16px; padding: 24px; }
+dialog.dialog header { display: grid; gap: 4px; }
+dialog.dialog header h2 { margin: 0; font-size: 18px; font-weight: 600; }
+dialog.dialog header p { margin: 0; color: var(--text-muted); font-size: 14px; }
+dialog.dialog footer { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+
+.tabs { display: grid; gap: 12px; }
+.tabs > [role="tablist"] {
+  display: inline-flex; gap: 4px; width: fit-content; max-width: 100%; padding: 4px; overflow-x: auto;
+  border-radius: var(--radius); background: color-mix(in srgb, var(--text) 6%, var(--surface));
+}
+.tabs [role="tab"] {
+  padding: 6px 12px; border: 0; border-radius: calc(var(--radius) - 4px); background: transparent;
+  color: var(--text-muted); font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer;
+}
+.tabs [role="tab"][aria-selected="true"] { background: var(--surface); color: var(--text); box-shadow: var(--shadow); }
+.tabs [role="tabpanel"][hidden] { display: none; }
+
+.accordion > details { border-bottom: 1px solid var(--border); }
+.accordion > details > summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 14px 0; font-weight: 500; list-style: none; cursor: pointer;
+}
+.accordion > details > summary::-webkit-details-marker { display: none; }
+.accordion > details > summary::after { content: "+"; color: var(--text-muted); font-size: 18px; line-height: 1; }
+.accordion > details[open] > summary::after { content: "\2212"; }
+.accordion > details > :not(summary) { margin: 0 0 14px; color: var(--text-muted); }
+
+.toaster {
+  position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-direction: column-reverse; gap: 8px;
+  width: min(360px, calc(100vw - 32px)); pointer-events: none;
+}
+.toaster .toast { pointer-events: auto; transition: opacity 200ms ease, transform 200ms ease; }
+.toaster .toast[aria-hidden="true"] { opacity: 0; transform: translateY(8px); }
+.toaster .toast-content {
+  padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--surface); color: var(--text); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); font-size: 13px;
+}
+.toaster .toast-content h2 { margin: 0 0 2px; font-size: 14px; font-weight: 600; }
+.toaster .toast-content p { margin: 0; color: var(--text-muted); }
+
+/* skipUI building blocks. */
+.skip-table-search { max-width: 320px; margin-bottom: 12px; }
+.skip-table-wrap { overflow-x: auto; }
+table.shell-table th[data-sort] { cursor: pointer; user-select: none; }
+table.shell-table th[aria-sort="ascending"]::after { content: " \25B2"; font-size: 9px; }
+table.shell-table th[aria-sort="descending"]::after { content: " \25BC"; font-size: 9px; }
+table.shell-table td.skip-table-empty { color: var(--text-muted); text-align: center; padding: 24px 0; }
+.skip-pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; font-size: 13px; color: var(--text-muted); }
+.toaster .toast[data-type="success"] .toast-content { border-left: 3px solid var(--success); }
+.toaster .toast[data-type="error"] .toast-content { border-left: 3px solid var(--danger); }
+
+</style>
+<script>
+/* Skip artifact shell — fixed helpers served beside every artifact. */
+(function () {
+  "use strict";
+
+  var fmt = {
+    num: function (v, opts) { return new Intl.NumberFormat("pt-BR", opts || {}).format(v); },
+    brl: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v); },
+    pct: function (v) { return new Intl.NumberFormat("pt-BR", { style: "percent", maximumFractionDigits: 1 }).format(v); },
+    compact: function (v) { return new Intl.NumberFormat("pt-BR", { notation: "compact", maximumFractionDigits: 1 }).format(v); },
+    brlCompact: function (v) { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: 1 }).format(v); }
+  };
+
+  // axisLabels formats the five y-axis ticks in the unit the chart declared
+  // (percent, BRL or plain numbers), compact so long values never clip, with
+  // the fewest decimals that still print every tick exactly (1,5 mi, not 2 mi).
+  function axisLabels(format, ticks) {
+    function at(digits) {
+      var opts = { notation: "compact", maximumFractionDigits: digits };
+      if (format === "pct") opts = { style: "percent", maximumFractionDigits: digits };
+      else if (format === "brl") opts = { style: "currency", currency: "BRL", notation: "compact", maximumFractionDigits: digits };
+      var nf = new Intl.NumberFormat("pt-BR", opts);
+      return ticks.map(function (t) { return nf.format(t); });
+    }
+    for (var digits = 0; digits < 2; digits++) {
+      if (at(digits).join("|") === at(digits + 1).join("|")) return at(digits);
+    }
+    return at(2);
+  }
+
+  // yAxisPad formats the ticks and measures the left padding they need from
+  // the longest one; drawYAxis then draws the grid and the labels.
+  function yAxisPad(format, max) {
+    var labels = axisLabels(format, [0, max / 4, max / 2, (max * 3) / 4, max]);
+    var longest = labels.reduce(function (m, l) { return Math.max(m, l.length); }, 0);
+    return { labels: labels, padL: Math.max(40, Math.round(longest * 6.2) + 14) };
+  }
+  function drawYAxis(svg, axis, W, padR, padT, plotH) {
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + plotH - (plotH * g) / 4;
+      svg.appendChild(svgEl("line", { x1: axis.padL, y1: gy, x2: W - padR, y2: gy, stroke: "currentColor", "stroke-opacity": 0.08 }));
+      var lbl = svgEl("text", { x: axis.padL - 8, y: gy + 4, "text-anchor": "end", "font-size": 10, fill: mutedColor() });
+      lbl.textContent = axis.labels[g];
+      svg.appendChild(lbl);
+    }
+  }
+
+  // xLabelStep: show every k-th category label so labels never overlap, and
+  // always the last one (counted back from the end).
+  function xLabelStep(labels, step) {
+    var longest = labels.reduce(function (m, l) { return Math.max(m, String(l).length); }, 0);
+    return Math.max(1, Math.ceil((longest * 6.4 + 8) / Math.max(step, 1)));
+  }
+  function drawXLabel(svg, text, x, y, W, edgeGuard) {
+    var anchor = "middle";
+    var half = String(text).length * 3.2;
+    if (edgeGuard && x - half < 4) anchor = "start";
+    if (edgeGuard && x + half > W - 4) anchor = "end";
+    var tx = svgEl("text", { x: x, y: y, "text-anchor": anchor, "font-size": 11, fill: mutedColor() });
+    tx.textContent = text;
+    svg.appendChild(tx);
+  }
+  // categoryLines fits a bar's category name in its slot: one line, two lines
+  // split at a space, or cut with "…". A bar without its name can't be read, so
+  // categories are never skipped; null when the slot is too narrow for that.
+  function categoryLines(text, slot) {
+    var fit = Math.floor((slot - 6) / 6.4);
+    var s = String(text);
+    if (fit < 4) return null;
+    if (s.length <= fit) return [s];
+    var cut = function (t) { return t.length <= fit ? t : t.slice(0, fit - 1).trimEnd() + "…"; };
+    var best = -1;
+    for (var i = 0; i < s.length; i++) {
+      if (s[i] === " " && (best < 0 || Math.abs(s.length / 2 - i) < Math.abs(s.length / 2 - best))) best = i;
+    }
+    if (best < 0) return [cut(s)];
+    return [cut(s.slice(0, best)), cut(s.slice(best + 1))];
+  }
+  function legend(el, items) {
+    var box = document.createElement("div");
+    box.className = "chart-legend";
+    items.forEach(function (it) {
+      var row = document.createElement("span");
+      var dot = document.createElement("i");
+      dot.style.background = it.color;
+      row.appendChild(dot);
+      row.appendChild(document.createTextNode((it.label || "") + (it.value ? " " : "")));
+      if (it.value) {
+        var v = document.createElement("b");
+        v.textContent = it.value;
+        row.appendChild(v);
+      }
+      box.appendChild(row);
+    });
+    resolve(el).appendChild(box);
+  }
+  var seriesPalette = ["#1baf7a", "#eda100", "#e34948", "#4a3aa7", "#e87ba4", "#0ea5b7"];
+
+  // format accepts a function OR one of the fmt names ("num" | "brl" | "pct").
+  // A page's function may return nothing or throw: the chart prints its
+  // number instead of taking the rest of the page script down with it.
+  function coerceFormat(spec) {
+    if (typeof spec === "function") {
+      return function (v) {
+        try {
+          var out = spec(v);
+          return out == null ? "" : String(out);
+        } catch (e) {
+          return fmt.num(v);
+        }
+      };
+    }
+    if (typeof spec === "string" && fmt[spec]) return fmt[spec];
+    return function (v) { return fmt.num(v); };
+  }
+
+  function accent() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--accent").trim() || "#2563eb";
+  }
+  function mutedColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue("--text-muted").trim() || "#5b6472";
+  }
+  function svgEl(tag, attrs) {
+    var el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    for (var k in attrs) el.setAttribute(k, attrs[k]);
+    return el;
+  }
+  function frame(el, w, h) {
+    var svg = svgEl("svg", { viewBox: "0 0 " + w + " " + h, role: "img" });
+    el = resolve(el);
+    el.innerHTML = "";
+    el.appendChild(svg);
+    return svg;
+  }
+
+  // maxOf guards the axis scale: empty values would give -Infinity (truthy,
+  // so "|| 1" can't catch it) and a non-positive max would flip the chart.
+  // finite reads a chart value as a number, 0 when it is not one (NaN,
+  // Infinity, a stray string), so one bad value cannot blank the axis.
+  function finite(v) {
+    var n = +v;
+    return isFinite(n) ? n : 0;
+  }
+
+  function maxOf(values) {
+    var m = values.length ? Math.max.apply(null, values.map(finite)) : 0;
+    return m > 0 ? m : 1;
+  }
+
+  // labelsFor pads or trims the category names to the n points drawn: pages
+  // pass labels and values of different lengths, and one throw here loses
+  // every section the page renders after the chart.
+  function labelsFor(cfg, n) {
+    var out = [];
+    for (var i = 0; i < n; i++) out.push(cfg.labels && cfg.labels[i] != null ? String(cfg.labels[i]) : "");
+    return out;
+  }
+
+  // niceMax rounds the scale up so the four grid steps land on round values
+  // (1, 1.5, 2, 2.5, 3, 4, 5, 6 or 8 × 10^k) and the tick labels read exactly.
+  function niceMax(max) {
+    var raw = max / 4;
+    var mag = Math.pow(10, Math.floor(Math.log10(raw)));
+    var res = raw / mag;
+    var steps = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10];
+    var nice = steps.filter(function (s) { return s >= res - 1e-9; })[0];
+    return nice * mag * 4;
+  }
+
+  // bar(el, {labels:[], values:[], color?, format?}) — vertical bar chart.
+  function bar(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 12;
+    var max = niceMax(maxOf(cfg.values));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = cfg.values.length;
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR;
+    var step = plotW / n, bw = Math.min(step * 0.62, 64);
+    var names = labels.map(function (l) { return categoryLines(l, step); });
+    var named = names.every(Boolean);
+    if (named && names.some(function (l) { return l.length > 1; })) padB = 42;
+    var plotH = H - padT - padB;
+    var color = cfg.color || accent();
+    var f = coerceFormat(cfg.format);
+    var every = xLabelStep(labels, step);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    cfg.values.forEach(function (v, i) {
+      var bh = Math.max(0, (finite(v) / max) * plotH);
+      var x = axis.padL + i * step + (step - bw) / 2;
+      var y = padT + plotH - bh;
+      var r = svgEl("rect", { x: x, y: y, width: bw, height: bh, rx: 4, fill: (cfg.colors && cfg.colors[i]) || color });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + f(v);
+      r.appendChild(t);
+      svg.appendChild(r);
+      if (named) {
+        names[i].forEach(function (text, li) {
+          drawXLabel(svg, text, x + bw / 2, padT + plotH + 18 + li * 13, W, false);
+        });
+      } else if ((n - 1 - i) % every === 0) {
+        drawXLabel(svg, labels[i], x + bw / 2, H - 10, W, false);
+      }
+    });
+  }
+
+  // line(el, {labels:[], values:[] | series:[{label, values, color?}], color?, format?})
+  // — one line, or several series on one scale with a legend under the chart.
+  function line(el, cfg) {
+    var W = 640, H = 280, padB = 30, padT = 12, padR = 16;
+    var series = cfg.series && cfg.series.length
+      ? cfg.series
+      : [{ label: "", values: cfg.values || [], color: cfg.color }];
+    var all = [];
+    series.forEach(function (s) { all = all.concat(s.values || []); });
+    var max = niceMax(maxOf(all));
+    var axis = yAxisPad(cfg.format, max);
+    var svg = frame(el, W, H);
+    var n = series.reduce(function (m, s) { return Math.max(m, (s.values || []).length); }, 0);
+    var labels = labelsFor(cfg, n);
+    var plotW = W - axis.padL - padR, plotH = H - padT - padB;
+    var f = coerceFormat(cfg.format);
+    drawYAxis(svg, axis, W, padR, padT, plotH);
+    var xs = labels.map(function (_, i) { return axis.padL + (n === 1 ? plotW / 2 : (plotW * i) / (n - 1)); });
+    var every = xLabelStep(labels, n > 1 ? plotW / (n - 1) : plotW);
+    labels.forEach(function (label, i) {
+      if ((n - 1 - i) % every === 0) drawXLabel(svg, label, xs[i], H - 10, W, true);
+    });
+    var colors = series.map(function (s, si) {
+      return s.color || (si === 0 ? (cfg.color || accent()) : seriesPalette[(si - 1) % seriesPalette.length]);
+    });
+    series.forEach(function (s, si) {
+      var color = colors[si];
+      var pts = (s.values || []).map(function (v, i) { return [xs[i], padT + plotH - (finite(v) / max) * plotH]; });
+      var d = pts.map(function (p, i) { return (i ? "L" : "M") + p[0].toFixed(1) + " " + p[1].toFixed(1); }).join(" ");
+      svg.appendChild(svgEl("path", { d: d, fill: "none", stroke: color, "stroke-width": 2, "stroke-linejoin": "round" }));
+      pts.forEach(function (p, i) {
+        var c = svgEl("circle", { cx: p[0], cy: p[1], r: 3.5, fill: color });
+        var t = svgEl("title", {});
+        t.textContent = (s.label ? s.label + " · " : "") + labels[i] + ": " + f(s.values[i]);
+        c.appendChild(t);
+        svg.appendChild(c);
+      });
+    });
+    if (series.length > 1) {
+      legend(el, series.map(function (s, si) { return { label: s.label, color: colors[si] }; }));
+    }
+  }
+
+  // donut(el, {labels:[], values:[], colors?, format?, center?, centerLabel?, legend?})
+  // — donut with a short total in the centre (compact, in the declared unit)
+  // and, with legend: true, the labels and shares listed under it.
+  function donut(el, cfg) {
+    var W = 320, H = 280, cx = W / 2, cy = H / 2, R = 92, r = 58;
+    var svg = frame(el, W, H);
+    // At 100% of a wide container the donut outgrows the height pages give
+    // the box and spills over the next section: keep it at its own size.
+    svg.style.maxWidth = W + "px";
+    svg.style.margin = "0 auto";
+    var values = cfg.values.map(finite);
+    var labels = labelsFor(cfg, values.length);
+    var sum = values.reduce(function (a, b) { return a + b; }, 0);
+    var total = sum || 1;
+    var palette = cfg.colors || [accent()].concat(seriesPalette);
+    // The hover keeps the full value; the centre has room for a short one.
+    var full = coerceFormat(cfg.format);
+    var short = typeof cfg.format === "function" ? full : cfg.format === "brl" ? fmt.brlCompact : fmt.compact;
+    var a0 = -Math.PI / 2;
+    values.forEach(function (v, i) {
+      var a1 = a0 + (v / total) * Math.PI * 2;
+      var large = a1 - a0 > Math.PI ? 1 : 0;
+      var p = ["M", cx + R * Math.cos(a0), cy + R * Math.sin(a0),
+        "A", R, R, 0, large, 1, cx + R * Math.cos(a1), cy + R * Math.sin(a1),
+        "L", cx + r * Math.cos(a1), cy + r * Math.sin(a1),
+        "A", r, r, 0, large, 0, cx + r * Math.cos(a0), cy + r * Math.sin(a0), "Z"].join(" ");
+      var path = svgEl("path", { d: p, fill: palette[i % palette.length] });
+      var t = svgEl("title", {});
+      t.textContent = labels[i] + ": " + full(v) + " (" + fmt.pct(v / total) + ")";
+      path.appendChild(t);
+      svg.appendChild(path);
+      a0 = a1;
+    });
+    // A share chart has no total worth printing: without its own centre text
+    // the caption alone takes the middle.
+    var text = cfg.center != null ? String(cfg.center) : (cfg.format === "pct" ? "" : short(sum));
+    if (text) {
+      var size = text.length > 9 ? 14 : text.length > 7 ? 17 : 20;
+      var center = svgEl("text", { x: cx, y: cfg.centerLabel ? cy + 1 : cy + 6, "text-anchor": "middle", "font-size": size, "font-weight": 650, fill: "currentColor" });
+      center.textContent = text;
+      svg.appendChild(center);
+    }
+    if (cfg.centerLabel) {
+      var cap = svgEl("text", { x: cx, y: text ? cy + 19 : cy + 5, "text-anchor": "middle", "font-size": 11, fill: mutedColor() });
+      cap.textContent = cfg.centerLabel;
+      svg.appendChild(cap);
+    }
+    if (cfg.legend) {
+      legend(el, labels.map(function (label, i) {
+        return { label: label, color: palette[i % palette.length], value: fmt.pct(values[i] / total) };
+      }));
+    }
+  }
+
+  // ---- Page building blocks: what dashboards and small systems kept
+  // re-implementing — a searchable sortable table, a KPI row, tabs, toasts,
+  // dialogs, saved state and mock data. Every call is opt-in, so a page that
+  // brings its own versions keeps them.
+
+  function resolve(target) {
+    return typeof target === "string" ? document.querySelector(target) : target;
+  }
+
+  function node(tag, className, text) {
+    var el = document.createElement(tag);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function isNumberColumn(col) {
+    return col.align === "right" || col.format === "num" || col.format === "brl" || col.format === "pct";
+  }
+
+  function cellText(col, row) {
+    var value = row[col.key];
+    if (value == null) return "";
+    return col.format ? coerceFormat(col.format)(value) : String(value);
+  }
+
+  function compareValues(a, b) {
+    if (typeof a === "number" && typeof b === "number") return a - b;
+    return String(a == null ? "" : a).localeCompare(String(b == null ? "" : b), "pt-BR", { numeric: true });
+  }
+
+  // table(el, {columns, rows, search?, pageSize?, empty?, onRowClick?}) — a
+  // table.shell-table with sortable headers, an optional search box and
+  // pager. A column is {key, label, format?, align?, sortable? (true),
+  // render?(value, row) returning a Node or an HTML string — the page writes
+  // its cell templates as markup}. Plain values are always set as text.
+  // Returns {setRows, rows}.
+  function table(target, cfg) {
+    var root = resolve(target);
+    var cols = cfg.columns || [];
+    var pageSize = cfg.pageSize || 0;
+    var state = { rows: (cfg.rows || []).slice(), query: "", key: null, dir: 1, page: 0 };
+    root.innerHTML = "";
+    if (cfg.search) {
+      var search = node("input", "input skip-table-search");
+      search.type = "search";
+      search.placeholder = typeof cfg.search === "string" ? cfg.search : "Buscar…";
+      search.setAttribute("aria-label", search.placeholder);
+      search.addEventListener("input", function () {
+        state.query = search.value.trim().toLowerCase();
+        state.page = 0;
+        draw();
+      });
+      root.appendChild(search);
+    }
+    var tableEl = node("table", "shell-table");
+    var headRow = node("tr");
+    var heads = cols.map(function (col) {
+      var th = node("th", isNumberColumn(col) ? "num" : "", col.label == null ? col.key : col.label);
+      th.scope = "col";
+      if (col.sortable !== false) {
+        var toggle = function () {
+          state.dir = state.key === col.key ? -state.dir : 1;
+          state.key = col.key;
+          draw();
+        };
+        th.setAttribute("data-sort", col.key);
+        th.tabIndex = 0;
+        th.addEventListener("click", toggle);
+        th.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        });
+      }
+      headRow.appendChild(th);
+      return th;
+    });
+    var thead = node("thead");
+    var tbody = node("tbody");
+    var wrap = node("div", "skip-table-wrap");
+    var pager = node("div", "skip-pager");
+    thead.appendChild(headRow);
+    tableEl.appendChild(thead);
+    tableEl.appendChild(tbody);
+    wrap.appendChild(tableEl);
+    root.appendChild(wrap);
+    if (pageSize) root.appendChild(pager);
+
+    function visibleRows() {
+      var rows = state.rows;
+      if (state.query) {
+        rows = rows.filter(function (row) {
+          return cols.some(function (col) { return cellText(col, row).toLowerCase().indexOf(state.query) >= 0; });
+        });
+      }
+      if (state.key) {
+        var key = state.key, dir = state.dir;
+        rows = rows.slice().sort(function (a, b) { return dir * compareValues(a[key], b[key]); });
+      }
+      return rows;
+    }
+
+    function drawRow(row) {
+      var tr = node("tr");
+      cols.forEach(function (col) {
+        var td = node("td", isNumberColumn(col) ? "num" : "");
+        if (!col.render) {
+          td.textContent = cellText(col, row);
+        } else {
+          var content = col.render(row[col.key], row);
+          if (content instanceof Node) td.appendChild(content);
+          else td.innerHTML = content == null ? "" : String(content);
+        }
+        tr.appendChild(td);
+      });
+      // The row stays a row (no role) and takes focus, so a keyboard reaches
+      // the same action; keys pressed on a control inside a cell are its own.
+      if (cfg.onRowClick) {
+        tr.style.cursor = "pointer";
+        tr.tabIndex = 0;
+        tr.addEventListener("click", function () { cfg.onRowClick(row); });
+        tr.addEventListener("keydown", function (e) {
+          if (e.target !== tr || (e.key !== "Enter" && e.key !== " ")) return;
+          e.preventDefault();
+          cfg.onRowClick(row);
+        });
+      }
+      return tr;
+    }
+
+    function pagerButton(label, disabled, step) {
+      var button = node("button", "btn", label);
+      button.type = "button";
+      button.setAttribute("data-variant", "outline");
+      button.setAttribute("data-size", "sm");
+      button.disabled = disabled;
+      button.addEventListener("click", function () { state.page += step; draw(); });
+      return button;
+    }
+
+    function draw() {
+      var rows = visibleRows();
+      heads.forEach(function (th, i) {
+        if (cols[i].key === state.key) th.setAttribute("aria-sort", state.dir > 0 ? "ascending" : "descending");
+        else th.removeAttribute("aria-sort");
+      });
+      var pages = pageSize ? Math.max(1, Math.ceil(rows.length / pageSize)) : 1;
+      state.page = Math.min(state.page, pages - 1);
+      var shown = pageSize ? rows.slice(state.page * pageSize, (state.page + 1) * pageSize) : rows;
+      tbody.innerHTML = "";
+      if (!shown.length) {
+        var empty = node("td", "skip-table-empty", cfg.empty || "Nenhum registro encontrado.");
+        empty.colSpan = cols.length;
+        tbody.appendChild(node("tr")).appendChild(empty);
+      }
+      shown.forEach(function (row) { tbody.appendChild(drawRow(row)); });
+      if (!pageSize) return;
+      pager.innerHTML = "";
+      var from = rows.length ? state.page * pageSize + 1 : 0;
+      pager.appendChild(node("span", "", from + "–" + Math.min(rows.length, (state.page + 1) * pageSize) + " de " + rows.length));
+      var nav = node("div", "row gap-2");
+      nav.appendChild(pagerButton("Anterior", state.page === 0, -1));
+      nav.appendChild(pagerButton("Próxima", state.page >= pages - 1, 1));
+      pager.appendChild(nav);
+    }
+
+    draw();
+    return {
+      setRows: function (rows) { state.rows = rows.slice(); draw(); },
+      rows: visibleRows
+    };
+  }
+
+  // kpis(el, [{label, value, format?, delta?, hint?}]) — KPI cards in a
+  // responsive grid; delta is a fraction (0.12 renders as ▲ 12%).
+  function kpis(target, items) {
+    var root = resolve(target);
+    root.innerHTML = "";
+    root.classList.add("shell-grid");
+    items.forEach(function (item) {
+      var card = node("div", "panel kpi");
+      card.appendChild(node("span", "kpi-label", item.label));
+      // Large money values go compact ("R$ 27,5 mi"): the full amount does
+      // not fit a KPI card at four per row.
+      var kpiFormat = item.format === "brl" && Math.abs(item.value) >= 1e6 ? fmt.brlCompact : (item.format ? coerceFormat(item.format) : null);
+      card.appendChild(node("span", "kpi-value", kpiFormat ? kpiFormat(item.value) : String(item.value)));
+      if (typeof item.delta === "number") {
+        var up = item.delta >= 0;
+        card.appendChild(node("span", "kpi-delta " + (up ? "up" : "down"), (up ? "▲ " : "▼ ") + fmt.pct(Math.abs(item.delta))));
+      }
+      if (item.hint) card.appendChild(node("span", "kpi-label", item.hint));
+      root.appendChild(card);
+    });
+  }
+
+  // badge(text, variant?) — a .badge node for table cells and lists;
+  // variant is "secondary" | "outline" | "destructive" (default: primary).
+  function badge(text, variant) {
+    var el = node("span", "badge", text);
+    if (variant) el.setAttribute("data-variant", variant);
+    return el;
+  }
+
+  // tabs(el) — wires one .tabs block: [role=tab] buttons inside
+  // [role=tablist], each with aria-controls naming its [role=tabpanel].
+  function tabs(target) {
+    var root = resolve(target);
+    var buttons = Array.prototype.slice.call(root.querySelectorAll('[role="tab"]'));
+    function select(chosen) {
+      buttons.forEach(function (b) {
+        var on = b === chosen;
+        b.setAttribute("aria-selected", on ? "true" : "false");
+        b.tabIndex = on ? 0 : -1;
+        var panel = document.getElementById(b.getAttribute("aria-controls"));
+        if (panel) panel.hidden = !on;
+      });
+    }
+    buttons.forEach(function (b, i) {
+      b.addEventListener("click", function () { select(b); });
+      b.addEventListener("keydown", function (e) {
+        var step = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        var next = buttons[(i + step + buttons.length) % buttons.length];
+        next.focus();
+        select(next);
+      });
+    });
+    select(buttons.filter(function (b) { return b.getAttribute("aria-selected") === "true"; })[0] || buttons[0]);
+  }
+
+  // toast(message, {type?: "success" | "error", title?, duration?}) — a
+  // .toast in a shared .toaster at the bottom of the page.
+  function toast(message, opts) {
+    opts = opts || {};
+    var toaster = document.querySelector(".toaster") || document.body.appendChild(node("div", "toaster"));
+    var item = node("div", "toast");
+    item.setAttribute("role", opts.type === "error" ? "alert" : "status");
+    item.setAttribute("aria-hidden", "true");
+    if (opts.type) item.setAttribute("data-type", opts.type);
+    var content = node("div", "toast-content");
+    var section = node("section");
+    if (opts.title) section.appendChild(node("h2", "", opts.title));
+    section.appendChild(node("p", "", message));
+    content.appendChild(section);
+    item.appendChild(content);
+    toaster.appendChild(item);
+    requestAnimationFrame(function () { item.setAttribute("aria-hidden", "false"); });
+    setTimeout(function () {
+      item.setAttribute("aria-hidden", "true");
+      setTimeout(function () { item.remove(); }, 400);
+    }, opts.duration || 3000);
+  }
+
+  // Dialogs are native <dialog class="dialog">: a [data-dialog-open="id"]
+  // anywhere opens one, a [data-dialog-close] inside closes it, and a click on
+  // its backdrop closes it too. Plain dialog.showModal()/close() still work.
+  document.addEventListener("click", function (e) {
+    var target = e.target;
+    if (!(target instanceof Element)) return;
+    var opener = target.closest("[data-dialog-open]");
+    if (opener) {
+      var dialog = document.getElementById(opener.getAttribute("data-dialog-open"));
+      if (dialog && dialog.showModal && !dialog.open) dialog.showModal();
+      return;
+    }
+    var closer = target.closest("[data-dialog-close]");
+    if (closer && closer.closest("dialog")) {
+      closer.closest("dialog").close();
+      return;
+    }
+    if (target.tagName === "DIALOG" && target.classList.contains("dialog") && target.open) target.close();
+  });
+
+  // store(key, fallback) — JSON state in localStorage that never throws (a
+  // private window or a full quota falls back to memory): {get, set, update}.
+  function store(key, fallback) {
+    var memory;
+    // Set while the last write did not reach localStorage: what is stored
+    // there is older than memory until a write goes through again.
+    var unsaved = false;
+    var initial = function () { return fallback === undefined ? undefined : JSON.parse(JSON.stringify(fallback)); };
+    function get() {
+      if (!unsaved) {
+        try {
+          var raw = localStorage.getItem(key);
+          if (raw != null) return JSON.parse(raw);
+        } catch (e) { /* storage unavailable: memory below */ }
+      }
+      return memory !== undefined ? memory : initial();
+    }
+    function set(value) {
+      memory = value;
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        unsaved = false;
+      } catch (e) {
+        unsaved = true;
+      }
+      return value;
+    }
+    return { get: get, set: set, update: function (fn) { return set(fn(get())); } };
+  }
+
+  // mock — seeded random data, so a page asks for 90 days of numbers in one
+  // line instead of writing them out; the same seed gives the same data.
+  var FIRST = ["Ana", "Bruno", "Carla", "Diego", "Eduarda", "Felipe", "Gabriela", "Henrique", "Isabela", "João",
+    "Larissa", "Marcos", "Natália", "Otávio", "Paula", "Rafael", "Sofia", "Thiago", "Vanessa", "Lucas"];
+  var LAST = ["Silva", "Santos", "Oliveira", "Souza", "Pereira", "Costa", "Rodrigues", "Almeida", "Nascimento", "Lima",
+    "Araújo", "Fernandes", "Carvalho", "Gomes", "Martins", "Rocha", "Ribeiro", "Barbosa"];
+  var INITIALS = "ABCDEFGHIJLMNOPRSTV".split("");
+  var CITIES = ["São Paulo, SP", "Rio de Janeiro, RJ", "Belo Horizonte, MG", "Curitiba, PR", "Porto Alegre, RS",
+    "Salvador, BA", "Recife, PE", "Fortaleza, CE", "Brasília, DF", "Goiânia, GO", "Campinas, SP", "Florianópolis, SC",
+    "Manaus, AM", "Belém, PA", "Vitória, ES", "Natal, RN"];
+
+  function createMock(seed) {
+    var state = seed >>> 0;
+    var names = 0;
+    function random() {
+      state = (state + 0x6d2b79f5) >>> 0;
+      var t = state;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+    function int(min, max) { return min + Math.floor(random() * (max - min + 1)); }
+    function pick(list) { return list[Math.floor(random() * list.length)]; }
+    var mock = {
+      seed: function (value) { state = value >>> 0; names = 0; return mock; },
+      random: random,
+      int: int,
+      float: function (min, max, decimals) {
+        var factor = Math.pow(10, decimals == null ? 2 : decimals);
+        return Math.round((min + random() * (max - min)) * factor) / factor;
+      },
+      pick: pick,
+      chance: function (p) { return random() < p; },
+      // There are 360 first/last pairs. A page that draws until the name is
+      // new (do { … } while (used.has(name))) froze the tab past them, so
+      // later draws widen the space: a second surname after 200 (6,480), a
+      // middle initial after 4,000.
+      name: function () {
+        names++;
+        var middle = names > 4000 ? pick(INITIALS) + ". " : "";
+        return pick(FIRST) + " " + middle + (names > 200 ? pick(LAST) + " " : "") + pick(LAST);
+      },
+      city: function () { return pick(CITIES); },
+      // series(n, {start, trend, noise, min, decimals}) — a walk: each value
+      // moves by trend (fraction per step) plus up to ±noise of itself.
+      series: function (n, opts) {
+        opts = opts || {};
+        var value = opts.start == null ? 100 : opts.start;
+        var factor = Math.pow(10, opts.decimals || 0);
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          out.push(Math.max(opts.min == null ? 0 : opts.min, Math.round(value * factor) / factor));
+          value = value * (1 + (opts.trend || 0)) * (1 + (random() * 2 - 1) * (opts.noise == null ? 0.08 : opts.noise));
+        }
+        return out;
+      },
+      // dates(n, {end?, step?: "day" | "week" | "month"}) — ISO dates
+      // (YYYY-MM-DD), oldest first, ending at end (default: today).
+      dates: function (n, opts) {
+        opts = opts || {};
+        var end = opts.end ? new Date(opts.end) : new Date();
+        var out = [];
+        for (var i = n - 1; i >= 0; i--) {
+          var d = new Date(end.getTime());
+          if (opts.step === "month") d.setMonth(d.getMonth() - i);
+          else d.setDate(d.getDate() - i * (opts.step === "week" ? 7 : 1));
+          out.push(d.toISOString().slice(0, 10));
+        }
+        return out;
+      },
+      // rows(n, spec) — n objects; each spec value is a function(i), a list
+      // to pick from, or a constant.
+      rows: function (n, spec) {
+        var out = [];
+        for (var i = 0; i < n; i++) {
+          var row = {};
+          for (var key in spec) {
+            var value = spec[key];
+            row[key] = typeof value === "function" ? value(i) : Array.isArray(value) ? pick(value) : value;
+          }
+          out.push(row);
+        }
+        return out;
+      }
+    };
+    return mock;
+  }
+
+  window.skipShell = { fmt: fmt };
+  window.skipChart = { bar: bar, line: line, donut: donut };
+  window.skipUI = { table: table, kpis: kpis, badge: badge, tabs: tabs, toast: toast };
+  window.skipStore = store;
+  window.skipMock = createMock(20261022);
+})();
+
+</script>
+<style>
+:root {
+--accent: #6d28d9;
+--accent-contrast: #ffffff;
+--c1: #7c3aed;
+--c2: #db2777;
+--c3: #0891b2;
+--c4: #16a34a;
+--c5: #f59e0b;
+font-family: 'Inter', system-ui, sans-serif;
+}
+body { background: #fdfcff; color: #1e1b2e; font-size: 1.125rem; line-height: 1.6; }
+h1, h2, h3, .display { font-family: 'Baloo 2', 'Inter', sans-serif; line-height: 1.15; }
+.nav-index {
+position: sticky; top: 0; z-index: 60;
+background: rgba(255,255,255,0.97); backdrop-filter: blur(8px);
+border-bottom: 3px solid var(--c2);
+box-shadow: 0 4px 18px rgba(109,40,217,0.12);
+}
+.nav-index ul { list-style: none; margin: 0; padding: 10px 14px; display: flex; gap: 8px; overflow-x: auto; }
+.nav-index a {
+display: inline-block; white-space: nowrap; padding: 8px 14px; border-radius: 999px;
+background: #f3e8ff; color: #4c1d95; font-weight: 600; text-decoration: none; font-size: 0.95rem;
+transition: transform .2s, background .2s;
+}
+.nav-index a:hover, .nav-index a:focus-visible { background: var(--c2); color: #fff; transform: translateY(-2px); outline: 3px solid #1e1b2e; outline-offset: 2px; }
+.section { padding: 72px 0; position: relative; }
+.section-title { font-size: clamp(2rem, 4.5vw, 3rem); color: #1e1b2e; margin: 0 0 8px; }
+.section-sub { color: #3f3a55; font-size: 1.15rem; margin: 0 0 32px; }
+.fade-in { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s ease; }
+.fade-in.visible { opacity: 1; transform: none; }
+.hero {
+background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 40%, #db2777 75%, #f59e0b 100%);
+color: #fff; border-radius: 0 0 48px 48px; padding: 72px 0 96px; position: relative; overflow: hidden;
+}
+.hero .sub { color: #fff; font-size: 1.3rem; }
+.hero .muted-light { color: #f5f3ff; }
+.pill { display: inline-block; padding: 8px 18px; border-radius: 999px; font-weight: 700; font-size: 0.95rem; background: #fff; color: #4c1d95; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
+.pill.dark { background: #1e1b2e; color: #fff; }
+.pill.green { background: #dcfce7; color: #14532d; }
+.pill.amber { background: #fef3c7; color: #78350f; }
+.float { animation: float 4s ease-in-out infinite; }
+.float-slow { animation: float 6s ease-in-out infinite; }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+.blob { position: absolute; border-radius: 50%; filter: blur(2px); opacity: .35; animation: float 7s ease-in-out infinite; pointer-events: none; }
+.emoji-big { font-size: 3.5rem; line-height: 1; display: inline-block; }
+.grid { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.card-v {
+background: #fff; border-radius: 26px; padding: 26px; border: 3px solid transparent;
+box-shadow: 0 10px 28px rgba(30,27,46,0.12); transition: transform .25s, box-shadow .25s;
+position: relative; overflow: hidden;
+}
+.card-v:hover { transform: translateY(-6px) rotate(-0.4deg); box-shadow: 0 18px 38px rgba(30,27,46,0.2); }
+.card-v h3 { font-size: 1.5rem; margin: 10px 0 6px; }
+.card-v p { margin: 0; color: #2b2740; }
+.grad-1 { background: linear-gradient(135deg,#ede9fe,#ddd6fe); border-color: var(--c1); }
+.grad-2 { background: linear-gradient(135deg,#fce7f3,#fbcfe8); border-color: var(--c2); }
+.grad-3 { background: linear-gradient(135deg,#cffafe,#a5f3fc); border-color: var(--c3); }
+.grad-4 { background: linear-gradient(135deg,#dcfce7,#bbf7d0); border-color: var(--c4); }
+.grad-5 { background: linear-gradient(135deg,#fef3c7,#fde68a); border-color: var(--c5); }
+.btn-big { font-size: 1.1rem; padding: 12px 22px; font-family: 'Baloo 2', sans-serif; font-weight: 700; }
+.objective { cursor: pointer; }
+.objective .more { display: none; margin-top: 12px; padding-top: 12px; border-top: 2px dashed #c4b5fd; font-size: 1.05rem; color: #2b2740; }
+.objective.open .more { display: block; animation: fadeDown .45s ease; }
+.objective .toggle-hint { font-weight: 700; color: #4c1d95; margin-top: 10px; display: inline-block; }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+.tip-luna {
+background: #1e1b2e; color: #fff; border-radius: 26px; padding: 26px 30px; margin-top: 34px;
+display: flex; gap: 18px; align-items: flex-start; border-left: 10px solid var(--c5);
+}
+.tip-luna strong { color: #fde68a; font-size: 1.2rem; }
+.wave-wrap { width: 100%; overflow: hidden; background: #ede9fe; border-radius: 26px; padding: 12px 0; }
+.wave-path { stroke: var(--c2); stroke-width: 6; fill: none; stroke-linecap: round; stroke-dasharray: 1200; stroke-dashoffset: 1200; animation: draw 3s ease forwards; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.chip-list { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.chip { background: #fff; border: 3px solid var(--c1); border-radius: 999px; padding: 8px 16px; font-weight: 600; color: #1e1b2e; font-size: 1rem; transition: transform .2s; }
+.chip:hover { transform: scale(1.06) rotate(-2deg); }
+.pillar { border-radius: 30px; padding: 30px; color: #fff; min-height: 280px; position: relative; }
+.pillar h3 { color: #fff; font-size: 1.7rem; }
+.pillar p { color: #fff; }
+.pillar.p1 { background: linear-gradient(145deg,#7c3aed,#4c1d95); }
+.pillar.p2 { background: linear-gradient(145deg,#db2777,#9d174d); }
+.pillar.p3 { background: linear-gradient(145deg,#0891b2,#155e75); }
+.pillar ul { padding-left: 20px; margin: 10px 0 0; }
+.pillar li { margin-bottom: 6px; font-size: 1.02rem; }
+.tri { display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); margin-top: 20px; }
+.col-head { font-family: 'Baloo 2', sans-serif; font-size: 1.6rem; font-weight: 800; color: #fff; padding: 14px 18px; border-radius: 20px 20px 0 0; }
+.col-body { background: #fff; border-radius: 0 0 20px 20px; padding: 20px; box-shadow: 0 10px 26px rgba(0,0,0,.1); min-height: 230px; }
+.col-body li { margin-bottom: 8px; }
+.col-body ul { padding-left: 20px; }
+.big-alert {
+margin: 34px auto 0; text-align: center; padding: 22px; border-radius: 26px;
+background: #fff1f2; border: 4px dashed #e11d48; color: #881337; font-family: 'Baloo 2', sans-serif; font-size: 2rem; font-weight: 800;
+animation: pulseText 1.8s ease-in-out infinite;
+}
+@keyframes pulseText { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+.key-question { background: linear-gradient(120deg,#fef3c7,#fde68a); border-radius: 26px; padding: 26px; margin-top: 26px; font-size: 1.35rem; font-weight: 700; color: #451a03; }
+.flip-wrap { perspective: 1200px; height: 300px; cursor: pointer; }
+.flip-inner { position: relative; width: 100%; height: 100%; transition: transform .7s cubic-bezier(.4,.2,.2,1); transform-style: preserve-3d; }
+.flip-wrap.flipped .flip-inner { transform: rotateY(180deg); }
+.flip-face { position: absolute; inset: 0; backface-visibility: hidden; border-radius: 26px; padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; box-shadow: 0 10px 28px rgba(30,27,46,.15); }
+.flip-front { color: #fff; }
+.flip-back { transform: rotateY(180deg); background: #fff; color: #1e1b2e; border: 4px solid; overflow-y: auto; }
+.flip-front h3 { color: #fff; font-size: 1.6rem; margin: 8px 0 0; }
+.flip-back ul { padding-left: 20px; margin: 0; }
+.flip-back li { margin-bottom: 6px; font-size: 1.02rem; }
+.f1 { background: linear-gradient(135deg,#7c3aed,#c026d3); }
+.f2 { background: linear-gradient(135deg,#0891b2,#16a34a); }
+.f3 { background: linear-gradient(135deg,#f59e0b,#e11d48); }
+.f4 { background: linear-gradient(135deg,#2563eb,#7c3aed); }
+.f5 { background: linear-gradient(135deg,#16a34a,#eab308); }
+.pillars-edu { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); }
+.edu-block { border-radius: 26px; padding: 28px 20px; text-align: center; color: #fff; font-family: 'Baloo 2', sans-serif; font-size: 1.6rem; font-weight: 800; animation: pulseBlock 2.6s ease-in-out infinite; }
+.edu-block small { display: block; font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 400; margin-top: 6px; }
+.eb1 { background: #7c3aed; } .eb2 { background: #db2777; animation-delay: .4s; } .eb3 { background: #0891b2; animation-delay: .8s; } .eb4 { background: #16a34a; animation-delay: 1.2s; }
+@keyframes pulseBlock { 0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0,0,0,.2); } 50% { transform: scale(1.05); box-shadow: 0 0 0 14px rgba(0,0,0,0); } }
+.target { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 22px; }
+.target span { background: #fff; border-radius: 999px; padding: 10px 18px; font-weight: 700; border: 3px solid #c4b5fd; }
+.checklist { list-style: none; padding: 0; margin: 18px 0 0; }
+.checklist li { background: #fff; border-radius: 16px; padding: 12px 16px; margin-bottom: 10px; font-size: 1.08rem; border-left: 8px solid var(--c4); box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+.decree-alert { background: #052e16; color: #fff; border-radius: 30px; padding: 34px; margin-top: 26px; text-align: center; }
+.decree-alert .big { font-family: 'Baloo 2', sans-serif; font-size: 2.1rem; font-weight: 800; color: #86efac; animation: glow 2s ease-in-out infinite; }
+@keyframes glow { 0%,100% { text-shadow: 0 0 0 #22c55e; } 50% { text-shadow: 0 0 22px #22c55e; } }
+.wheel-wrap { position: relative; width: 100%; max-width: 560px; aspect-ratio: 1; margin: 0 auto; }
+.wheel-center { position: absolute; inset: 30%; border-radius: 50%; background: linear-gradient(135deg,#7c3aed,#db2777); color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; font-family: 'Baloo 2', sans-serif; font-size: 1.5rem; font-weight: 800; padding: 10px; box-shadow: 0 0 0 10px #fff, 0 16px 40px rgba(0,0,0,.25); animation: spin 40s linear infinite; }
+.wheel-center span { animation: spin 40s linear infinite reverse; display: block; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.wheel-btn { position: absolute; width: 27%; aspect-ratio: 1; border-radius: 50%; border: none; cursor: pointer; color: #fff; font-family: 'Baloo 2', sans-serif; font-weight: 700; font-size: 1.05rem; text-align: center; padding: 6px; box-shadow: 0 10px 24px rgba(0,0,0,.25); transition: transform .25s; }
+.wheel-btn:hover, .wheel-btn:focus-visible { transform: scale(1.12); outline: 4px solid #1e1b2e; outline-offset: 3px; }
+.wheel-btn .ic { display: block; font-size: 2rem; }
+.wheel-btn:nth-child(1){ top:0%; left:36.5%; background:#7c3aed; }
+.wheel-btn:nth-child(2){ top:17%; right:0%; background:#db2777; }
+.wheel-btn:nth-child(3){ bottom:17%; right:0%; background:#0891b2; }
+.wheel-btn:nth-child(4){ bottom:0%; left:36.5%; background:#16a34a; }
+.wheel-btn:nth-child(5){ bottom:17%; left:0%; background:#f59e0b; color:#1e1b2e; }
+.wheel-btn:nth-child(6){ top:17%; left:0%; background:#e11d48; }
+.wheel-detail { background: #fff; border-radius: 26px; padding: 26px; min-height: 180px; box-shadow: 0 10px 28px rgba(0,0,0,.12); border: 4px solid #c4b5fd; }
+.accordion details { background: #fff; border-radius: 20px; padding: 16px 20px; margin-bottom: 14px; box-shadow: 0 6px 18px rgba(0,0,0,.08); border-left: 8px solid var(--c1); }
+.accordion summary { cursor: pointer; font-weight: 700; font-size: 1.12rem; font-family: 'Baloo 2', sans-serif; }
+.accordion details[open] summary { color: #7c3aed; }
+.accordion p { margin: 12px 0 0; color: #2b2740; }
+.case-box { background: linear-gradient(135deg,#fef3c7,#fff); border-radius: 30px; padding: 28px; border: 4px solid var(--c5); }
+.quiz-q { background: #fff; border-radius: 24px; padding: 24px; margin-bottom: 20px; box-shadow: 0 8px 22px rgba(0,0,0,.08); }
+.quiz-q h3 { font-size: 1.35rem; margin: 0 0 14px; }
+.opt-btn { display: block; width: 100%; text-align: left; background: #f5f3ff; border: 3px solid #c4b5fd; border-radius: 16px; padding: 12px 16px; font-size: 1.08rem; font-family: 'Inter', sans-serif; color: #1e1b2e; cursor: pointer; margin-bottom: 10px; transition: transform .2s, background .2s; }
+.opt-btn:hover { transform: translateX(6px); background: #ede9fe; }
+.opt-btn.correct { background: #bbf7d0; border-color: #16a34a; animation: bounceOK .6s ease; }
+.opt-btn.wrong { background: #fecaca; border-color: #dc2626; animation: shake .5s ease; }
+@keyframes bounceOK { 0%{transform:scale(1)} 40%{transform:scale(1.06)} 100%{transform:scale(1)} }
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+.feedback { font-weight: 700; margin-top: 10px; font-size: 1.1rem; min-height: 1.5em; }
+.feedback.ok { color: #14532d; } .feedback.no { color: #7f1d1d; }
+.score-card { background: linear-gradient(135deg,#7c3aed,#db2777); color: #fff; border-radius: 30px; padding: 30px; text-align: center; margin-top: 24px; }
+.score-card .num { font-family: 'Baloo 2', sans-serif; font-size: 4rem; font-weight: 800; }
+.closing-steps { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; margin: 30px 0; }
+.step-pill { background: #fff; border-radius: 26px; padding: 22px 26px; font-family: 'Baloo 2', sans-serif; font-size: 1.7rem; font-weight: 800; box-shadow: 0 10px 26px rgba(0,0,0,.12); }
+.arrow { font-size: 2.6rem; color: var(--c2); animation: nudge 1.2s ease-in-out infinite; }
+@keyframes nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(10px); } }
+.counter-row { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); }
+.counter { background: #fff; border-radius: 26px; padding: 24px; text-align: center; box-shadow: 0 10px 26px rgba(0,0,0,.1); border-top: 8px solid var(--c3); }
+.counter .n { font-family: 'Baloo 2', sans-serif; font-size: 3.2rem; font-weight: 800; color: #4c1d95; }
+.counter .l { font-size: 1.02rem; color: #2b2740; }
+.toggle-btn { margin-top: 10px; }
+.footer-cred { background: #1e1b2e; color: #f5f3ff; padding: 48px 0; border-radius: 48px 48px 0 0; }
+.slide-page { display: none; }
+.slide-page.is-active { display: block; animation: pageIn .45s ease both; }
+@keyframes pageIn { from { opacity: 0; transform: translateX(24px); } to { opacity: 1; transform: none; } }
+.slide-page.is-leaving { animation: pageOut .25s ease both; }
+@keyframes pageOut { from { opacity: 1; transform: none; } to { opacity: 0; transform: translateX(-24px); } }
+.slide-page .fade-in { opacity: 1; transform: none; }
+.pager { position: fixed; left: 0; right: 0; bottom: 0; z-index: 70; background: rgba(255,255,255,0.97); backdrop-filter: blur(8px); border-top: 3px solid var(--c1); box-shadow: 0 -6px 18px rgba(109,40,217,0.15); padding: 10px 14px 12px; }
+.pager-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: space-between; }
+.pager-btn { font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.15rem; border: none; border-radius: 999px; padding: 12px 22px; cursor: pointer; color: #fff; min-width: 150px; transition: transform .2s, filter .2s, opacity .2s; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.pager-btn:hover:not(:disabled) { transform: translateY(-2px); filter: brightness(1.08); }
+.pager-btn:focus-visible { outline: 4px solid #1e1b2e; outline-offset: 3px; }
+.pager-btn:disabled { opacity: 0; pointer-events: none; }
+.pager-prev { background: #db2777; }
+.pager-next { background: #16a34a; }
+.pager-next.finish { background: #f59e0b; color: #1e1b2e; }
+.pager-info { flex: 1 1 200px; text-align: center; }
+.pager-count { font-family: 'Baloo 2', sans-serif; font-weight: 800; color: #4c1d95; font-size: 1.05rem; }
+.pager-bar { height: 10px; border-radius: 999px; background: #ede9fe; overflow: hidden; margin-top: 6px; }
+.pager-fill { height: 100%; width: 0; background: linear-gradient(90deg,#7c3aed,#db2777,#f59e0b); border-radius: 999px; transition: width .5s ease; }
+.has-pager { padding-bottom: 130px; }
+@media (max-width: 640px) { .pager-btn { min-width: 0; flex: 1 1 40%; font-size: 1rem; } }
+@media (prefers-reduced-motion: reduce) { .slide-page.is-active, .slide-page.is-leaving { animation: none !important; } }
+.tv-btn { display: inline-flex; align-items: center; gap: 10px; font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.35rem; padding: 16px 28px; border-radius: 999px; border: 4px solid #fff; background: linear-gradient(135deg,#f59e0b,#db2777); color: #fff; cursor: pointer; box-shadow: 0 10px 26px rgba(0,0,0,.3); transition: transform .2s, box-shadow .2s; }
+.tv-btn:hover, .tv-btn:focus-visible { transform: translateY(-3px) scale(1.03); box-shadow: 0 16px 34px rgba(0,0,0,.35); outline: 4px solid #1e1b2e; outline-offset: 3px; }
+.tv-float { display: none; position: fixed; right: 16px; bottom: 16px; z-index: 90; background: #1e1b2e; color: #fff; border: 3px solid #fde68a; border-radius: 999px; padding: 12px 18px; font-family: 'Baloo 2', sans-serif; font-weight: 800; font-size: 1.1rem; cursor: pointer; box-shadow: 0 8px 22px rgba(0,0,0,.4); }
+.tv-float:focus-visible { outline: 4px solid #fde68a; outline-offset: 3px; }
+.tv-float .tv-exit { margin-left: 10px; color: #fecaca; }
+body.tv-mode .nav-index, body.tv-mode .pager, body.tv-mode .tv-cta { display: none !important; }
+body.tv-mode.has-pager { padding-bottom: 0; }
+body.tv-mode .tv-float { display: inline-flex; align-items: center; }
+body.tv-mode { font-size: 1.35rem; }
+body.tv-mode .section { padding: 110px 0; }
+body.tv-mode .section-title { font-size: clamp(2.8rem, 6vw, 4.4rem); }
+body.tv-mode .section-sub, body.tv-mode p { font-size: 1.4rem; }
+body.tv-mode .card-v, body.tv-mode .pillar, body.tv-mode .col-body, body.tv-mode .quiz-q { padding: 36px; }
+body.tv-mode .card-v h3, body.tv-mode h3 { font-size: 1.9rem; }
+body.tv-mode .grid, body.tv-mode .tri, body.tv-mode .pillars-edu { gap: 32px; }
+body.tv-mode .chip { font-size: 1.25rem; padding: 12px 22px; }
+body.tv-mode .pill { font-size: 1.2rem; }
+body.tv-mode .hero { padding: 110px 0 130px; }
+body.tv-mode .accordion summary { font-size: 1.4rem; }
+body.tv-mode .opt-btn { font-size: 1.35rem; padding: 18px 22px; }
+body.tv-mode .checklist li { font-size: 1.3rem; padding: 18px 22px; }
+body.tv-mode .wheel-btn { font-size: 1.3rem; }
+body.tv-mode .slide-page { display: block !important; animation: none !important; }
+body.tv-mode .slide-page:not(.is-tv-current) { opacity: 0.25; }
+body.tv-mode .slide-page.is-tv-current { opacity: 1; }
+.footer-cred a { color: #fde68a; }
+.footer-cred li { margin-bottom: 8px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } .fade-in { opacity: 1; transform: none; } }
+@media (max-width: 640px) {
+.hero h1 { font-size: 2.2rem; }
+.flip-wrap { height: 340px; }
+.wheel-center { font-size: 1.1rem; }
+}
+</style>
+</head>
+<body class="has-pager">
+
+<!-- ÍNDICE FIXO -->
+<nav class="nav-index" aria-label="Índice da cartilha">
+<ul>
+<li><a href="#capa">Capa</a></li>
+<li><a href="#objetivos">Objetivos</a></li>
+<li><a href="#neuro">Neurodesenvolvimento</a></li>
+<li><a href="#tea">TEA</a></li>
+<li><a href="#classificacoes">DSM x CID</a></li>
+<li><a href="#apoios">Apoios</a></li>
+<li><a href="#inclusao">Inclusão</a></li>
+<li><a href="#decreto">Decreto</a></li>
+<li><a href="#papel">Papel do AT</a></li>
+<li><a href="#caso">Estudo de caso</a></li>
+<li><a href="#quiz">Quiz</a></li>
+<li><a href="#fechamento">Fechamento</a></li>
+</ul>
+</nav>
+
+<main id="slides">
+<!-- 1) CAPA -->
+<header class="hero slide-page" id="capa">
+<div class="blob" style="width:180px;height:180px;background:#fde68a;top:40px;left:-40px;"></div>
+<div class="blob" style="width:140px;height:140px;background:#67e8f9;bottom:40px;right:10%;animation-delay:1.5s;"></div>
+<div class="blob" style="width:90px;height:90px;background:#f9a8d4;top:30%;right:4%;animation-delay:.8s;"></div>
+<div class="shell-container row between items-center gap-6" style="flex-wrap:wrap;">
+<div style="flex:1 1 420px;">
+<span class="pill">🎓 ESMP MT • Cuiabá-MT</span>
+<h1 class="display" style="font-size:clamp(2.4rem,5.5vw,4rem);margin:18px 0 10px;">Cartilha Interativa do Acompanhante Terapêutico — Módulo 1: Neurodesenvolvimento, Autismo e Inclusão</h1>
+<p class="sub" style="font-size:1.45rem;font-weight:700;margin:0 0 14px;">Compreender antes de intervir</p>
+<div class="row gap-2" style="flex-wrap:wrap;">
+<span class="pill green">⏱️ 180 horas</span>
+<span class="pill amber">💻 Online + 🏫 Presencial</span>
+<span class="pill">📍 Formato híbrido</span>
+</div>
+<div class="row gap-3 mt-4" style="flex-wrap:wrap;">
+<button type="button" class="tv-btn tv-cta" id="btnTv">📺 Modo TV / Rolagem Automática</button>
+<a href="#objetivos" class="btn btn-big" data-variant="secondary">Começar a cartilha 🚀</a>
+<button class="btn btn-big" data-variant="outline" id="btnCopyCapa" style="background:#fff;color:#4c1d95;">Copiar título 📋</button>
+</div>
+<p class="muted-light text-sm mt-3" style="font-size:1rem;">Toque nos cards, vire as cartas e responda ao quiz no final. Seu progresso é salvo neste navegador.</p>
+</div>
+<div style="flex:0 1 320px;text-align:center;">
+<!-- Luna coruja SVG -->
+<svg id="luna" class="float" viewBox="0 0 240 260" width="240" height="260" role="img" aria-label="Luna, a coruja da inclusão" style="max-width:100%;filter:drop-shadow(0 14px 18px rgba(0,0,0,.25));">
+<g id="lunaBody" style="transform-origin:120px 150px;animation:sway 3.6s ease-in-out infinite;">
+<ellipse cx="120" cy="160" rx="82" ry="86" fill="#a78bfa"/>
+<ellipse cx="120" cy="175" rx="58" ry="62" fill="#ddd6fe"/>
+<path d="M50 70 L70 20 L95 60 Z" fill="#7c3aed"/>
+<path d="M190 70 L170 20 L145 60 Z" fill="#7c3aed"/>
+<circle cx="88" cy="110" r="36" fill="#fff"/>
+<circle cx="152" cy="110" r="36" fill="#fff"/>
+<circle cx="90" cy="112" r="16" fill="#1e1b2e" id="eyeL" style="transform-origin:90px 112px;animation:blink 4s infinite;"/>
+<circle cx="150" cy="112" r="16" fill="#1e1b2e" id="eyeR" style="transform-origin:150px 112px;animation:blink 4s infinite;"/>
+<circle cx="96" cy="106" r="5" fill="#fff"/>
+<circle cx="156" cy="106" r="5" fill="#fff"/>
+<path d="M112 140 L128 140 L120 156 Z" fill="#f59e0b"/>
+<path d="M85 220 L100 240 L110 224" fill="none" stroke="#f59e0b" stroke-width="7" stroke-linecap="round"/>
+<path d="M130 224 L140 240 L155 220" fill="none" stroke="#f59e0b" stroke-width="7" stroke-linecap="round"/>
+<circle cx="120" cy="200" r="0" fill="#db2777"/>
+<path d="M92 200 Q120 218 148 200" fill="none" stroke="#db2777" stroke-width="5" stroke-linecap="round"/>
+</g>
+</svg>
+<div class="pill dark" style="margin-top:10px;">🦉 Luna, a coruja da inclusão</div>
+</div>
+</div>
+</header>
+
+<!-- 2) OBJETIVOS -->
+<section class="section slide-page" id="objetivos">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">🎯 Roteiro</span>
+<h2 class="section-title mt-2">O que vamos aprender</h2>
+<p class="section-sub">Clique em cada objetivo para ver o que ele significa na prática do AT.</p>
+</div>
+<div class="grid">
+<div class="card-v grad-1 objective fade-in" tabindex="0" role="button" aria-expanded="false">
+<span class="emoji-big">🧠</span>
+<h3>Fundamentos</h3>
+<p>Compreender os fundamentos do neurodesenvolvimento.</p>
+<span class="toggle-hint">Ver detalhes ▼</span>
+<div class="more">Entender como maturação, experiências, linguagem, movimento e atenção se combinam ao longo da vida.</div>
+</div>
+<div class="card-v grad-2 objective fade-in" tabindex="0" role="button" aria-expanded="false">
+<span class="emoji-big">🔍</span>
+<h3>Características do TEA</h3>
+<p>Reconhecer as características centrais do TEA.</p>
+<span class="toggle-hint">Ver detalhes ▼</span>
+<div class="more">Comunicação social, comportamentos e interesses, e formas próprias de aprender e participar.</div>
+</div>
+<div class="card-v grad-3 objective fade-in" tabindex="0" role="button" aria-expanded="false">
+<span class="emoji-big">📚</span>
+<h3>Classificações</h3>
+<p>Diferenciar DSM-5, CID-10 e CID-11.</p>
+<span class="toggle-hint">Ver detalhes ▼</span>
+<div class="more">Saber o que cada sistema propõe e por que o AT não usa esses critérios para diagnosticar.</div>
+</div>
+<div class="card-v grad-4 objective fade-in" tabindex="0" role="button" aria-expanded="false">
+<span class="emoji-big">🧩</span>
+<h3>Necessidades de apoio</h3>
+<p>Identificar necessidades individuais de apoio.</p>
+<span class="toggle-hint">Ver detalhes ▼</span>
+<div class="more">Observar o que a pessoa precisa para participar, comunicar-se e aprender em cada ambiente.</div>
+</div>
+<div class="card-v grad-5 objective fade-in" tabindex="0" role="button" aria-expanded="false">
+<span class="emoji-big">🤝</span>
+<h3>Inclusão e autonomia</h3>
+<p>Relacionar inclusão, autonomia e atuação do AT.</p>
+<span class="toggle-hint">Ver detalhes ▼</span>
+<div class="more">O AT apoia a participação e reduz a dependência sempre que possível.</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 3) NEURODESENVOLVIMENTO -->
+<section class="section slide-page" id="neuro" style="background:linear-gradient(180deg,#fdf4ff,#ecfeff);">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">🌱 Fundamentos</span>
+<h2 class="section-title mt-2">O desenvolvimento não é linha reta!</h2>
+<p class="section-sub">Ele acontece em ondas, com avanços, pausas e ajustes ao longo do tempo.</p>
+</div>
+<div class="wave-wrap fade-in">
+<svg viewBox="0 0 1000 200" width="100%" height="200" preserveAspectRatio="none" aria-hidden="true">
+<path class="wave-path" d="M0 100 C 80 20, 160 180, 240 100 S 400 20, 480 100 S 640 180, 720 100 S 880 20, 1000 100"/>
+</svg>
+</div>
+<div class="chip-list fade-in">
+<span class="chip">🧬 Maturação cerebral</span>
+<span class="chip">🌍 Experiências</span>
+<span class="chip">🏡 Ambiente</span>
+<span class="chip">💞 Vínculos</span>
+<span class="chip">💬 Linguagem</span>
+<span class="chip">🏃 Movimento</span>
+<span class="chip">👀 Atenção</span>
+<span class="chip">🧭 Funções executivas</span>
+<span class="chip">👥 Participação social</span>
+</div>
+<div class="tip-luna fade-in">
+<span class="emoji-big" style="font-size:2.6rem;">🦉</span>
+<div>
+<strong>Dica da Luna:</strong>
+<p style="margin:8px 0 0;color:#f5f3ff;">O olhar do AT deve ser descritivo, funcional e orientado à necessidade de apoio. Evite rótulos rápidos: descreva o que a pessoa faz, em quais contextos e com que tipo de ajuda.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 4) TEA -->
+<section class="section slide-page" id="tea">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">🧩 Transtorno do Espectro Autista</span>
+<h2 class="section-title mt-2">TEA — o que é</h2>
+<p class="section-sub">Três pilares que se manifestam de formas diferentes em cada pessoa. Passe o mouse ou toque para ver os pilares flutuando.</p>
+</div>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+<div class="pillar p1 float fade-in">
+<span class="emoji-big">💬</span>
+<h3>Comunicação social</h3>
+<p>Como a pessoa se conecta com os outros:</p>
+<ul>
+<li>Contato social e reciprocidade</li>
+<li>Linguagem verbal ou não verbal</li>
+<li>Compreensão de regras sociais</li>
+</ul>
+</div>
+<div class="pillar p2 float-slow fade-in">
+<span class="emoji-big">🔄</span>
+<h3>Comportamento e interesses</h3>
+<p>Como a pessoa organiza sua rotina e percepção:</p>
+<ul>
+<li>Rotinas, repetição e previsibilidade</li>
+<li>Interesses intensos e focados</li>
+<li>Respostas sensoriais diferentes</li>
+</ul>
+</div>
+<div class="pillar p3 float fade-in" style="animation-delay:.8s;">
+<span class="emoji-big">📖</span>
+<h3>Aprendizagem e participação</h3>
+<p>Como a pessoa aprende e está no mundo:</p>
+<ul>
+<li>Modos próprios de aprender</li>
+<li>Jeitos próprios de se mover</li>
+<li>Formas próprias de prestar atenção</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 5) DSM / CID -->
+<section class="section slide-page" id="classificacoes" style="background:#f8fafc;">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">📘 Sistemas de classificação</span>
+<h2 class="section-title mt-2">DSM-5 × CID-10 × CID-11</h2>
+<p class="section-sub">Comparativo visual: cada sistema organiza o diagnóstico de um jeito diferente.</p>
+</div>
+<div class="tri">
+<div class="fade-in">
+<div class="col-head" style="background:linear-gradient(135deg,#7c3aed,#4c1d95);">DSM-5</div>
+<div class="col-body">
+<p><strong>Associação Americana de Psiquiatria (APA).</strong></p>
+<ul>
+<li><strong>Critério A:</strong> déficits persistentes na comunicação e interação social.</li>
+<li><strong>Critério B:</strong> padrões restritos e repetitivos de comportamento.</li>
+<li><strong>Níveis de suporte</strong> (1, 2 e 3) conforme a necessidade de apoio.</li>
+</ul>
+</div>
+</div>
+<div class="fade-in">
+<div class="col-head" style="background:linear-gradient(135deg,#db2777,#9d174d);">CID-10</div>
+<div class="col-body">
+<p><strong>Organização Mundial da Saúde.</strong></p>
+<ul>
+<li>Trata os transtornos em <strong>categorias separadas</strong>.</li>
+<li>Autismo e outras condições aparecem como itens distintos.</li>
+<li>Usado em grande parte da rede de saúde brasileira.</li>
+</ul>
+</div>
+</div>
+<div class="fade-in">
+<div class="col-head" style="background:linear-gradient(135deg,#0891b2,#155e75);">CID-11</div>
+<div class="col-body">
+<p><strong>Organização Mundial da Saúde (vigente).</strong></p>
+<ul>
+<li>Classificação <strong>mais integrada</strong> do espectro.</li>
+<li>Organiza o TEA com base em comprometimentos e características.</li>
+<li>Reforça o olhar sobre funcionamento e não apenas sobre rótulos.</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="big-alert fade-in">DIAGNÓSTICO ≠ PLANO DE APOIO</div>
+<div class="tip-luna fade-in" style="margin-top:26px;">
+<span class="emoji-big" style="font-size:2.4rem;">⚠️</span>
+<div>
+<strong>Aviso importante:</strong>
+<p style="margin:8px 0 0;color:#f5f3ff;">O AT não diagnostica. Diagnósticos são feitos por profissional habilitado. O trabalho do AT começa onde o diagnóstico termina: na organização do apoio.</p>
+</div>
+</div>
+<div class="key-question fade-in">
+❓ Pergunta-chave do AT: <em>"De que tipo de apoio essa pessoa precisa para participar, aprender e se comunicar melhor neste ambiente?"</em>
+</div>
+</div>
+</section>
+
+<!-- 6) NECESSIDADES DE APOIO -->
+<section class="section slide-page" id="apoios">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">🃏 Toque para virar</span>
+<h2 class="section-title mt-2">Necessidades de apoio</h2>
+<p class="section-sub">Cinco áreas para observar. Clique em cada carta para ver os exemplos.</p>
+</div>
+<div class="grid">
+<div class="flip-wrap fade-in" tabindex="0" role="button" aria-label="Virar carta Comunicação">
+<div class="flip-inner">
+<div class="flip-face flip-front f1"><span class="emoji-big">💬</span><h3>Comunicação</h3><p style="color:#fff;margin:6px 0 0;">Clique para virar ↻</p></div>
+<div class="flip-face flip-back" style="border-color:#7c3aed;"><h3 style="color:#4c1d95;margin:0 0 8px;">Comunicação</h3><ul><li>Pedir algo</li><li>Recusar</li><li>Escolher</li><li>Compreender instruções</li></ul></div>
+</div>
+</div>
+<div class="flip-wrap fade-in" tabindex="0" role="button" aria-label="Virar carta Autonomia">
+<div class="flip-inner">
+<div class="flip-face flip-front f2"><span class="emoji-big">🍽️</span><h3>Autonomia</h3><p style="color:#fff;margin:6px 0 0;">Clique para virar ↻</p></div>
+<div class="flip-face flip-back" style="border-color:#0891b2;"><h3 style="color:#155e75;margin:0 0 8px;">Autonomia</h3><ul><li>Alimentação</li><li>Higiene</li><li>Deslocamento</li><li>Organização de materiais</li></ul></div>
+</div>
+</div>
+<div class="flip-wrap fade-in" tabindex="0" role="button" aria-label="Virar carta Regulação">
+<div class="flip-inner">
+<div class="flip-face flip-front f3"><span class="emoji-big">🌈</span><h3>Regulação</h3><p style="color:#fff;margin:6px 0 0;">Clique para virar ↻</p></div>
+<div class="flip-face flip-back" style="border-color:#e11d48;"><h3 style="color:#9f1239;margin:0 0 8px;">Regulação</h3><ul><li>Previsibilidade da rotina</li><li>Pausas planejadas</li><li>Manejo sensorial</li><li>Manejo emocional</li></ul></div>
+</div>
+</div>
+<div class="flip-wrap fade-in" tabindex="0" role="button" aria-label="Virar carta Aprendizagem">
+<div class="flip-inner">
+<div class="flip-face flip-front f4"><span class="emoji-big">📖</span><h3>Aprendizagem</h3><p style="color:#fff;margin:6px 0 0;">Clique para virar ↻</p></div>
+<div class="flip-face flip-back" style="border-color:#2563eb;"><h3 style="color:#1d4ed8;margin:0 0 8px;">Aprendizagem</h3><ul><li>Mediação da atividade</li><li>Rotina visual</li><li>Adaptação de materiais</li></ul></div>
+</div>
+</div>
+<div class="flip-wrap fade-in" tabindex="0" role="button" aria-label="Virar carta Interação">
+<div class="flip-inner">
+<div class="flip-face flip-front f5"><span class="emoji-big">🤸</span><h3>Interação</h3><p style="color:#fff;margin:6px 0 0;">Clique para virar ↻</p></div>
+<div class="flip-face flip-back" style="border-color:#16a34a;"><h3 style="color:#14532d;margin:0 0 8px;">Interação</h3><ul><li>Brincar com outros</li><li>Convívio com pares</li><li>Respeitar turnos</li><li>Entender regras sociais</li></ul></div>
+</div>
+</div>
+</div>
+<div class="key-question fade-in" style="font-size:1.25rem;">
+💡 O bom apoio favorece a participação — sem retirar a oportunidade de autonomia.
+</div>
+</div>
+</section>
+
+<!-- 7) EDUCAÇÃO ESPECIAL INCLUSIVA -->
+<section class="section slide-page" id="inclusao" style="background:linear-gradient(180deg,#ecfeff,#fdf4ff);">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">🏫 Educação especial inclusiva</span>
+<h2 class="section-title mt-2">Público-alvo e pilares</h2>
+<p class="section-sub">A escola precisa garantir acesso e participação de todos os estudantes.</p>
+</div>
+<div class="target fade-in">
+<span>♿ Pessoas com deficiência</span>
+<span>🧩 Pessoas com TEA</span>
+<span>⭐ Altas habilidades / superdotação</span>
+</div>
+<div class="pillars-edu" style="margin-top:28px;">
+<div class="edu-block eb1 fade-in">ACESSO<small>Entrar, estar e chegar ao conteúdo</small></div>
+<div class="edu-block eb2 fade-in">PERMANÊNCIA<small>Continuar com apoio adequado</small></div>
+<div class="edu-block eb3 fade-in">PARTICIPAÇÃO<small>Interagir e opinar no grupo</small></div>
+<div class="edu-block eb4 fade-in">APRENDIZAGEM<small>Desenvolver-se com estratégias</small></div>
+</div>
+<div class="card-v fade-in" style="margin-top:30px;">
+<h3 style="margin-top:0;">🛠️ Inclusão na prática</h3>
+<p class="muted text-sm" style="font-size:1rem;">Cinco ações que o AT pode apoiar junto à escola.</p>
+<ul class="checklist">
+<li>🔎 Identificar barreiras do ambiente e das atividades</li>
+<li>🧰 Adaptar estratégias de ensino e de rotina</li>
+<li>🗣️ Favorecer a comunicação em todos os espaços</li>
+<li>🙌 Garantir a participação nas atividades coletivas</li>
+<li>🌟 Promover a autonomia progressivamente</li>
+</ul>
+</div>
+</div>
+</section>
+
+<!-- 8) DECRETO -->
+<section class="section slide-page" id="decreto">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">📜 Legislação</span>
+<h2 class="section-title mt-2">Decreto 12.686/2025</h2>
+<p class="section-sub">Regras para o profissional de apoio escolar, com foco em formação e atuação em rede.</p>
+</div>
+<div class="grid">
+<div class="card-v grad-1 fade-in">
+<span class="emoji-big">🎓</span>
+<h3>Formação</h3>
+<p>Formação inicial de nível médio e formação profissional específica para a função de apoio escolar.</p>
+</div>
+<div class="card-v grad-3 fade-in">
+<span class="emoji-big">⚖️</span>
+<h3>Ética e registro</h3>
+<p>Atuação ética, registros organizados e rotina documentada e compartilhada.</p>
+</div>
+<div class="card-v grad-4 fade-in">
+<span class="emoji-big">🤝</span>
+<h3>Atuação em rede</h3>
+<p>Diálogo permanente entre escola, família, equipe de saúde e demais profissionais.</p>
+</div>
+</div>
+<div class="decree-alert fade-in">
+<div class="big">✅ A oferta do apoio NÃO depende de laudo, diagnóstico ou documento de saúde.</div>
+<p style="color:#dcfce7;margin:12px 0 0;font-size:1.1rem;">O direito ao apoio nasce da necessidade de participação, não de um papel.</p>
+</div>
+</div>
+</section>
+
+<!-- 9) PAPEL DO AT -->
+<section class="section slide-page" id="papel" style="background:#faf5ff;">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">🧭 Atuação</span>
+<h2 class="section-title mt-2">O papel do Acompanhante Terapêutico</h2>
+<p class="section-sub">Clique nos botões ao redor da roda para conhecer cada ação.</p>
+</div>
+<div class="grid" style="grid-template-columns:minmax(300px,1fr) minmax(300px,1fr);align-items:center;">
+<div class="wheel-wrap fade-in">
+<div class="wheel-center"><span>AT<br>em rede 🌐</span></div>
+<button class="wheel-btn" data-action="0"><span class="ic">👁️</span>Observar e registrar</button>
+<button class="wheel-btn" data-action="1"><span class="ic">🗨️</span>Apoiar comunicação</button>
+<button class="wheel-btn" data-action="2"><span class="ic">📣</span>Comunicar com ética</button>
+<button class="wheel-btn" data-action="3"><span class="ic">🌱</span>Promover autonomia</button>
+<button class="wheel-btn" data-action="4"><span class="ic">🛑</span>Respeitar limites</button>
+<button class="wheel-btn" data-action="5"><span class="ic">🤝</span>Trabalhar em rede</button>
+</div>
+<div class="wheel-detail fade-in" id="wheelDetail" aria-live="polite">
+<h3 style="margin-top:0;" id="wdTitle">Selecione uma ação</h3>
+<p id="wdText" style="font-size:1.1rem;">Toque em um dos seis círculos para ver o que o AT faz nessa frente.</p>
+<div class="row gap-2 mt-3" style="flex-wrap:wrap;">
+<button class="btn" data-variant="outline" id="btnCopyPapel">Copiar resumo 📋</button>
+<button class="btn" data-variant="ghost" id="btnResetPapel">Recomeçar 🔄</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 10) ESTUDO DE CASO -->
+<section class="section slide-page" id="caso">
+<div class="shell-container">
+<div class="fade-in">
+<span class="pill">🕵️ Atividade</span>
+<h2 class="section-title mt-2">Estudo de caso</h2>
+<p class="section-sub">Leia o caso e clique nas perguntas para revelar sugestões de resposta.</p>
+</div>
+<div class="case-box fade-in">
+<h3 style="margin-top:0;">👧 Caso de Bia (6 anos)</h3>
+<p style="font-size:1.12rem;">Bia tem diagnóstico de TEA. Evita atividades em grupo, tem dificuldade com mudanças na rotina, comunica-se principalmente por gestos e costuma chorar com muito barulho na sala de aula.</p>
+</div>
+<div class="accordion mt-4 fade-in">
+<details>
+<summary>1. Quais necessidades de apoio podem ser observadas?</summary>
+<p>Comunicação (pedir e recusar por gestos ou figuras), regulação (previsibilidade e manejo do barulho), interação (participação em pequenos grupos) e aprendizagem (rotina visual para mudanças).</p>
+</details>
+<details>
+<summary>2. O que registrar?</summary>
+<p>Situações em que o barulho gerou crise, reações às mudanças de rotina, gestos utilizados e atividades em que Bia se sentiu mais confortável. Registre fatos, contextos e frequência, sem interpretações rápidas.</p>
+</details>
+<details>
+<summary>3. Quais adaptações simples podem ajudar?</summary>
+<p>Fone de proteção auricular em momentos ruidosos, cartão visual com a sequência do dia, aviso antecipado sobre mudanças, espaço calmo para pausas e grupos menores nas atividades.</p>
+</details>
+<details>
+<summary>4. Como comunicar à equipe e à família?</summary>
+<p>De forma descritiva e combinada: relate o que foi observado e a estratégia testada, alinhe a mesma linguagem visual em casa e na escola, e registre os combinados no plano de apoio, sem diagnosticar.</p>
+</details>
+</div>
+</div>
+</section>
+
+<!-- 11) QUIZ -->
+<section class="section slide-page" id="quiz" style="background:linear-gradient(180deg,#fef9c3,#fdf4ff);">
+<div class="shell-container" style="max-width:860px;">
+<div class="fade-in">
+<span class="pill">🏆 Quiz</span>
+<h2 class="section-title mt-2">Teste o que aprendeu</h2>
+<p class="section-sub">Cinco perguntas. Escolha uma opção em cada uma e veja o feedback na hora.</p>
+</div>
+<div id="quizBox">
+<div class="quiz-q fade-in" data-q="0">
+<h3>(a) O AT pode dar diagnóstico?</h3>
+<button class="opt-btn" data-correct="false">Sim, quando a família pede</button>
+<button class="opt-btn" data-correct="true">Não, diagnósticos são feitos por profissional habilitado</button>
+<div class="feedback"></div>
+</div>
+<div class="quiz-q fade-in" data-q="1">
+<h3>(b) O apoio escolar depende de laudo?</h3>
+<button class="opt-btn" data-correct="true">Não, a oferta não depende de laudo</button>
+<button class="opt-btn" data-correct="false">Sim, sempre é obrigatório</button>
+<div class="feedback"></div>
+</div>
+<div class="quiz-q fade-in" data-q="2">
+<h3>(c) O que é mais importante: rótulo ou funcionalidade?</h3>
+<button class="opt-btn" data-correct="false">O rótulo</button>
+<button class="opt-btn" data-correct="true">A funcionalidade</button>
+<div class="feedback"></div>
+</div>
+<div class="quiz-q fade-in" data-q="3">
+<h3>(d) Cite um pilar da inclusão.</h3>
+<button class="opt-btn" data-correct="true">Acesso, permanência, participação ou aprendizagem</button>
+<button class="opt-btn" data-correct="false">Isolamento</button>
+<div class="feedback"></div>
+</div>
+<div class="quiz-q fade-in" data-q="4">
+<h3>(e) O AT deve promover autonomia ou dependência?</h3>
+<button class="opt-btn" data-correct="true">Autonomia</button>
+<button class="opt-btn" data-correct="false">Dependência</button>
+<div class="feedback"></div>
+</div>
+</div>
+<div class="score-card fade-in" id="scoreCard" style="display:none;">
+<div>Sua pontuação</div>
+<div class="num" id="scoreNum">0/5</div>
+<div id="scoreMsg">Ótimo trabalho! Continue explorando.</div>
+<div class="row gap-2 mt-3" style="justify-content:center;flex-wrap:wrap;">
+<button class="btn" data-variant="secondary" id="btnRestartQuiz">Refazer quiz 🔁</button>
+<button class="btn" data-variant="outline" id="btnCopyScore" style="background:#fff;color:#4c1d95;">Copiar resultado 📋</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- 12) FECHAMENTO -->
+<section class="section slide-page" id="fechamento">
+<div class="shell-container" style="text-align:center;">
+<div class="fade-in">
+<span class="pill">💜 Para levar</span>
+<h2 class="section-title mt-2" style="max-width:900px;margin-left:auto;margin-right:auto;">Olhe para a pessoa antes do diagnóstico, para a funcionalidade antes do rótulo e para a autonomia antes da dependência.</h2>
+</div>
+<div class="closing-steps">
+<div class="step-pill fade-in">🧠 Compreender</div>
+<span class="arrow">➜</span>
+<div class="step-pill fade-in">👀 Observar</div>
+<span class="arrow" style="animation-delay:.4s;">➜</span>
+<div class="step-pill fade-in">🤲 Apoiar</div>
+</div>
+<div class="fade-in" style="display:flex;flex-direction:column;align-items:center;">
+<svg id="lunaBye" viewBox="0 0 160 170" width="160" height="170" role="img" aria-label="Luna dizendo tchau">
+<g style="transform-origin:80px 150px;animation:sway 2.2s ease-in-out infinite;">
+<ellipse cx="80" cy="110" rx="56" ry="58" fill="#a78bfa"/>
+<ellipse cx="80" cy="120" rx="38" ry="40" fill="#ddd6fe"/>
+<path d="M30 50 L40 15 L60 40 Z" fill="#7c3aed"/>
+<path d="M130 50 L120 15 L100 40 Z" fill="#7c3aed"/>
+<circle cx="60" cy="80" r="22" fill="#fff"/>
+<circle cx="100" cy="80" r="22" fill="#fff"/>
+<circle cx="62" cy="82" r="10" fill="#1e1b2e" style="transform-origin:62px 82px;animation:blink 4s infinite;"/>
+<circle cx="102" cy="82" r="10" fill="#1e1b2e" style="transform-origin:102px 82px;animation:blink 4s infinite;"/>
+<path d="M74 96 L86 96 L80 108 Z" fill="#f59e0b"/>
+</g>
+<path d="M130 95 Q150 70 145 45" fill="none" stroke="#a78bfa" stroke-width="10" stroke-linecap="round" style="transform-origin:130px 95px;animation:wave 1.2s ease-in-out infinite;"/>
+</svg>
+<p style="font-size:1.4rem;font-weight:700;color:#4c1d95;margin:8px 0 0;">Tchau, até a próxima! 🦉💜</p>
+<p class="muted text-sm" style="font-size:1rem;">Luna agradece sua dedicação ao módulo.</p>
+<button class="btn btn-big mt-3" data-variant="outline" id="btnCopyFechamento">Copiar mensagem final 📋</button>
+</div>
+</div>
+</section>
+
+</main>
+
+<!-- Contadores -->
+<section class="section" style="padding-top:20px;padding-bottom:20px;">
+<div class="shell-container">
+<div class="counter-row">
+<div class="counter fade-in"><div class="n" data-count="180">0</div><div class="l">horas de curso</div></div>
+<div class="counter fade-in"><div class="n" data-count="5">0</div><div class="l">objetivos de aprendizagem</div></div>
+
+<div class="counter fade-in"><div class="n" data-count="6">0</div><div class="l">frentes de atuação do AT</div></div>
+</div>
+</div>
+</section>
+
+<!-- 13) RODAPÉ -->
+<footer class="footer-cred">
+<div class="shell-container">
+<h3 style="color:#fff;margin-top:0;">📚 Referências</h3>
+<ul style="padding-left:20px;margin:0;">
+<li>BRASIL. Decreto nº 12.686, de 2025 — apoio escolar e inclusão.</li>
+<li>OMS. Classificação Internacional de Doenças — CID-11 e CID-10.</li>
+<li>APA. Manual Diagnóstico e Estatístico de Transtornos Mentais — DSM-5 e DSM-5-TR.</li>
+<li>CDC. Centers for Disease Control and Prevention — Autism Spectrum Disorder.</li>
+<li>BRASIL. Lei nº 13.146/2015 — Lei Brasileira de Inclusão da Pessoa com Deficiência (Estatuto da Pessoa com Deficiência).</li>
+</ul>
+<div class="row between mt-5" style="flex-wrap:wrap;gap:12px;">
+<div>
+<strong style="font-size:1.2rem;">ESMP MT — Espaço de Saúde em Medicina Psicossomática</strong>
+<div style="font-size:1rem;">Cuiabá-MT • Curso de Formação de Acompanhante Terapêutico • 180h</div>
+</div>
+<div class="pill">🎓 Módulo 1 • Cartilha interativa</div>
+</div>
+<div class="shell-footer mt-4" style="color:#e9d5ff;font-size:.95rem;">Conteúdo educativo elaborado para fins de formação. Não substitui avaliação profissional.</div>
+</div>
+</footer>
+
+<nav class="pager" aria-label="Navegação entre seções">
+<div class="pager-inner">
+<button type="button" class="pager-btn pager-prev" id="pagerPrev">◀ Voltar</button>
+<div class="pager-info">
+<div class="pager-count" id="pagerCount" aria-live="polite">1 de 1</div>
+<div class="pager-bar" aria-hidden="true"><div class="pager-fill" id="pagerFill"></div></div>
+</div>
+<button type="button" class="pager-btn pager-next" id="pagerNext">Seguir ▶</button>
+</div>
+</nav>
+
+<button type="button" class="tv-float" id="tvFloat" aria-label="Controles do Modo TV">⏸ Pausar</button>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+// TV mode
+var tvOn = false, tvPaused = false, tvRAF = null, tvTimer = null, tvStart = 0, tvPauseAt = 0, tvElapsed = 0;
+var tvSpeed = 40, tvHold = 4000, tvHolding = false, tvIdx = 0;
+var tvBtn = document.getElementById('btnTv');
+var tvFloat = document.getElementById('tvFloat');
+function tvSections() { return Array.prototype.slice.call(document.querySelectorAll('#slides > .slide-page')); }
+function tvLabel() {
+if (!tvOn) return '⏸ Pausar';
+return tvPaused ? '▶ Retomar' : '⏸ Pausar';
+}
+function tvRefreshFloat() {
+tvFloat.innerHTML = tvLabel() + '<span class="tv-exit">✕ Sair do Modo TV</span>';
+}
+function tvGo(i) {
+var secs = tvSections();
+secs.forEach(function (s) { s.classList.remove('is-tv-current'); });
+tvIdx = i;
+var el = secs[i];
+el.classList.add('is-tv-current');
+el.querySelectorAll('.fade-in').forEach(function (x) { x.classList.add('visible'); });
+var top = el.getBoundingClientRect().top + window.pageYOffset;
+window.scrollTo({ top: top, behavior: 'smooth' });
+}
+function tvFrame(now) {
+if (!tvOn || tvPaused) return;
+if (tvHolding) return;
+var y = window.pageYOffset;
+var max = document.documentElement.scrollHeight - window.innerHeight;
+var step = tvSpeed / 60;
+window.scrollTo(0, Math.min(max, y + step));
+tvRAF = requestAnimationFrame(tvFrame);
+}
+function tvPauseSection() {
+tvHolding = true;
+var secs = tvSections();
+var cur = secs[tvIdx];
+var top = cur.getBoundingClientRect().top + window.pageYOffset;
+var bottom = top + cur.offsetHeight;
+var next = secs[tvIdx + 1];
+if (next && (bottom - window.pageYOffset > window.innerHeight * 0.3)) {
+// keep going to next section
+}
+tvTimer = setTimeout(function () {
+tvHolding = false;
+if (!tvOn || tvPaused) return;
+var nextIdx = tvIdx + 1;
+if (nextIdx >= secs.length) { nextIdx = 0; }
+if (nextIdx === 0) {
+window.scrollTo({ top: 0, behavior: 'auto' });
+tvGo(0);
+} else {
+tvGo(nextIdx);
+}
+tvSchedule();
+}, tvHold);
+}
+function tvSchedule() {
+tvRAF = requestAnimationFrame(tvFrame);
+}
+function tvBegin() {
+tvOn = true; tvPaused = false;
+document.body.classList.add('tv-mode');
+document.body.classList.remove('has-pager');
+pages.forEach(function (p) { p.classList.add('is-active'); });
+tvGo(0);
+tvRefreshFloat();
+tvSchedule();
+window.skipUI.toast('Modo TV ativado', { type: 'success' });
+var de = document.documentElement;
+if (de.requestFullscreen && !document.fullscreenElement) {
+de.requestFullscreen().catch(function () {});
+}
+}
+function tvEnd() {
+tvOn = false; tvPaused = false; tvHolding = false;
+cancelAnimationFrame(tvRAF);
+clearTimeout(tvTimer);
+document.body.classList.remove('tv-mode');
+document.body.classList.add('has-pager');
+tvSections().forEach(function (s) { s.classList.remove('is-tv-current'); });
+pages.forEach(function (p) { p.classList.remove('is-active'); });
+showPage(0, false);
+if (document.fullscreenElement && document.exitFullscreen) {
+document.exitFullscreen().catch(function () {});
+}
+window.scrollTo({ top: 0, behavior: 'auto' });
+}
+function tvTogglePause() {
+if (!tvOn) return;
+if (tvPaused) {
+tvPaused = false;
+tvSchedule();
+if (tvHolding) { /* hold timer still pending */ }
+} else {
+tvPaused = true;
+cancelAnimationFrame(tvRAF);
+}
+tvRefreshFloat();
+}
+tvBtn.addEventListener('click', function () {
+if (tvOn) { tvEnd(); return; }
+tvBegin();
+});
+tvFloat.addEventListener('click', function (e) {
+var x = e.offsetX;
+var w = tvFloat.offsetWidth;
+if (x > w * 0.6) { tvEnd(); } else { tvTogglePause(); }
+});
+document.addEventListener('keydown', function (e) {
+if (!tvOn) return;
+if (e.key === 'Escape') tvEnd();
+if (e.key === ' ') { e.preventDefault(); tvTogglePause(); }
+});
+document.addEventListener('fullscreenchange', function () {
+if (tvOn && !document.fullscreenElement) { /* keep TV mode running */ }
+});
+// Section pager
+var pages = Array.prototype.slice.call(document.querySelectorAll('#slides > .slide-page'));
+var pIdx = 0;
+var pPrev = document.getElementById('pagerPrev');
+var pNext = document.getElementById('pagerNext');
+var pCount = document.getElementById('pagerCount');
+var pFill = document.getElementById('pagerFill');
+function showPage(i, animate) {
+if (i < 0 || i >= pages.length) return;
+var cur = pages[pIdx];
+var next = pages[i];
+function activate() {
+pages.forEach(function (p) { p.classList.remove('is-active', 'is-leaving'); });
+next.classList.add('is-active');
+pIdx = i;
+next.querySelectorAll('.fade-in').forEach(function (el) { el.classList.add('visible'); });
+window.scrollTo({ top: 0, behavior: 'auto' });
+pCount.textContent = (i + 1) + ' de ' + pages.length;
+pFill.style.width = (((i + 1) / pages.length) * 100) + '%';
+pPrev.disabled = i === 0;
+var last = i === pages.length - 1;
+pNext.textContent = last ? '🏁 Finalizar' : 'Seguir ▶';
+pNext.classList.toggle('finish', last);
+}
+if (animate && cur !== next) {
+cur.classList.add('is-leaving');
+setTimeout(activate, 240);
+} else {
+activate();
+}
+}
+pPrev.addEventListener('click', function () { showPage(pIdx - 1, true); });
+pNext.addEventListener('click', function () {
+if (tvOn) return;
+if (pIdx === pages.length - 1) {
+window.skipUI.toast('Você concluiu a cartilha! 🎉', { type: 'success' });
+window.scrollTo({ top: 0, behavior: 'smooth' });
+return;
+}
+showPage(pIdx + 1, true);
+});
+document.querySelectorAll('.nav-index a').forEach(function (a) {
+a.addEventListener('click', function (e) {
+if (tvOn) return;
+var id = a.getAttribute('href').slice(1);
+var i = pages.findIndex(function (p) { return p.id === id; });
+if (i >= 0) { e.preventDefault(); showPage(i, true); }
+});
+});
+showPage(0, false);
+
+// Fade-in on scroll
+var io = new IntersectionObserver(function (entries) {
+entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(function (el) { io.observe(el); });
+
+// Objectives expand
+document.querySelectorAll('.objective').forEach(function (card) {
+function toggle() {
+var open = card.classList.toggle('open');
+card.setAttribute('aria-expanded', open ? 'true' : 'false');
+card.querySelector('.toggle-hint').textContent = open ? 'Fechar ▲' : 'Ver detalhes ▼';
+}
+card.addEventListener('click', toggle);
+card.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+});
+
+// Flip cards
+document.querySelectorAll('.flip-wrap').forEach(function (w) {
+function flip() { w.classList.toggle('flipped'); }
+w.addEventListener('click', flip);
+w.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); flip(); } });
+});
+
+// Counters
+var counted = false;
+var cio = new IntersectionObserver(function (entries) {
+entries.forEach(function (e) {
+if (e.isIntersecting && !counted) {
+counted = true;
+document.querySelectorAll('[data-count]').forEach(function (el) {
+var target = parseInt(el.getAttribute('data-count'), 10);
+var start = 0; var t0 = performance.now(); var dur = 1400;
+function step(now) {
+var p = Math.min(1, (now - t0) / dur);
+el.textContent = Math.round(start + (target - start) * p);
+if (p < 1) requestAnimationFrame(step);
+}
+requestAnimationFrame(step);
+});
+}
+});
+}, { threshold: 0.4 });
+document.querySelectorAll('.counter').forEach(function (c) { cio.observe(c); });
+
+// Wheel of AT
+var papel = [
+{ t: 'Observar e registrar', d: 'Registrar fatos, contextos e frequência de comportamentos e participação, sem interpretações rápidas.' },
+{ t: 'Apoiar comunicação e participação', d: 'Ofertar recursos de comunicação (gestos, figuras, cartões) e mediar a participação nas atividades.' },
+{ t: 'Comunicar com equipe, família e escola de forma ética', d: 'Relatar o observado de forma descritiva, respeitando o sigilo e o papel de cada profissional.' },
+{ t: 'Promover autonomia', d: 'Reduzir a ajuda aos poucos, sempre que possível, para que a pessoa faça mais por si mesma.' },
+{ t: 'Respeitar limites', d: 'Não diagnosticar, não prescrever e não atuar isoladamente: o AT compõe uma equipe.' },
+{ t: 'Trabalhar em rede', d: 'Integrar plano terapêutico, plano pedagógico e a rotina real da pessoa em seus ambientes.' }
+];
+var wdTitle = document.getElementById('wdTitle');
+var wdText = document.getElementById('wdText');
+document.querySelectorAll('.wheel-btn').forEach(function (b) {
+b.addEventListener('click', function () {
+var item = papel[parseInt(b.getAttribute('data-action'), 10)];
+wdTitle.textContent = item.t;
+wdText.textContent = item.d;
+document.querySelectorAll('.wheel-btn').forEach(function (x) { x.style.outline = ''; });
+b.style.outline = '4px solid #1e1b2e';
+window.skipUI.toast(item.t, { title: 'Ação do AT' });
+});
+});
+document.getElementById('btnCopyPapel').addEventListener('click', function () {
+var txt = wdTitle.textContent + ': ' + wdText.textContent;
+navigator.clipboard.writeText(txt).then(function () { window.skipUI.toast('Resumo copiado!', { type: 'success' }); }).catch(function () { window.skipUI.toast('Não foi possível copiar', { type: 'error' }); });
+});
+document.getElementById('btnResetPapel').addEventListener('click', function () {
+wdTitle.textContent = 'Selecione uma ação';
+wdText.textContent = 'Toque em um dos seis círculos para ver o que o AT faz nessa frente.';
+document.querySelectorAll('.wheel-btn').forEach(function (x) { x.style.outline = ''; });
+window.skipUI.toast('Roda reiniciada');
+});
+
+// Quiz
+var answered = 0, score = 0;
+document.querySelectorAll('.quiz-q').forEach(function (q) {
+var fb = q.querySelector('.feedback');
+q.querySelectorAll('.opt-btn').forEach(function (btn) {
+btn.addEventListener('click', function () {
+if (q.dataset.done) return;
+q.dataset.done = '1';
+answered++;
+var ok = btn.getAttribute('data-correct') === 'true';
+if (ok) { score++; btn.classList.add('correct'); fb.textContent = '🎉 Acertou! Muito bem!'; fb.className = 'feedback ok'; }
+else {
+btn.classList.add('wrong');
+var right = q.querySelector('[data-correct="true"]');
+right.classList.add('correct');
+fb.textContent = '❌ Ops! A resposta certa está destacada em verde.';
+fb.className = 'feedback no';
+}
+if (answered === 5) {
+document.getElementById('scoreNum').textContent = score + '/5';
+document.getElementById('scoreMsg').textContent = score === 5 ? 'Perfeito! Você domina o módulo.' : (score >= 3 ? 'Ótimo trabalho! Continue explorando.' : 'Releia as seções e tente de novo.');
+document.getElementById('scoreCard').style.display = 'block';
+window.skipUI.toast('Quiz concluído: ' + score + '/5', { type: score >= 3 ? 'success' : 'error' });
+}
+});
+});
+});
+document.getElementById('btnRestartQuiz').addEventListener('click', function () {
+answered = 0; score = 0;
+document.querySelectorAll('.quiz-q').forEach(function (q) {
+delete q.dataset.done;
+q.querySelector('.feedback').textContent = '';
+q.querySelectorAll('.opt-btn').forEach(function (b) { b.classList.remove('correct', 'wrong'); });
+});
+document.getElementById('scoreCard').style.display = 'none';
+window.skipUI.toast('Quiz reiniciado');
+});
+document.getElementById('btnCopyScore').addEventListener('click', function () {
+var txt = 'Quiz AT Módulo 1 — pontuação: ' + score + '/5';
+navigator.clipboard.writeText(txt).then(function () { window.skipUI.toast('Resultado copiado!', { type: 'success' }); }).catch(function () { window.skipUI.toast('Não foi possível copiar', { type: 'error' }); });
+});
+
+// Copy buttons
+document.getElementById('btnCopyCapa').addEventListener('click', function () {
+navigator.clipboard.writeText('Cartilha Interativa do Acompanhante Terapêutico — Módulo 1: Neurodesenvolvimento, Autismo e Inclusão').then(function () { window.skipUI.toast('Título copiado!', { type: 'success' }); }).catch(function () { window.skipUI.toast('Não foi possível copiar', { type: 'error' }); });
+});
+document.getElementById('btnCopyFechamento').addEventListener('click', function () {
+navigator.clipboard.writeText('Olhar para a pessoa antes do diagnóstico, para a funcionalidade antes do rótulo e para a autonomia antes da dependência.').then(function () { window.skipUI.toast('Mensagem copiada!', { type: 'success' }); }).catch(function () { window.skipUI.toast('Não foi possível copiar', { type: 'error' }); });
+});
+});
+</script>
+<style>
+@keyframes sway { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@keyframes blink { 0%,44%,50%,100% { transform: scaleY(1); } 47% { transform: scaleY(0.1); } }
+@keyframes wave { 0%,100% { transform: rotate(-12deg); } 50% { transform: rotate(14deg); } }
+</style>
+</body>
+</html>
